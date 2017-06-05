@@ -4,7 +4,7 @@
  *.[out]
 build    #过滤整个build文件夹
 *.class    #过滤所有.class文件
- 
+.idea 
  cartographer
  cartographer_ros
  ceres-solver
