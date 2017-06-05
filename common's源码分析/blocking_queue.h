@@ -25,7 +25,17 @@
 #include "cartographer/common/port.h"
 #include "cartographer/common/time.h"
 #include "glog/logging.h"
-
+/*
+ * BlockingQueue是线程安全的阻塞队列,(生产者消费者模式)
+ * 不可拷贝不可赋值
+ * 构造函数初始化队列大小,kInfiniteQueueSize不限制容量或queue_size限制容量?->通过条件变量做到.
+ * Push()添加元素,容量不够时,阻塞等待
+ * Pop()删除元素,没有元素时,阻塞等待
+ * Peek()返回下一个应该弹出的元素
+ * PushWithTimeout(),添加元素,超时则返回false
+ * PopWithTimeout(),同上
+ *
+ * */
 namespace cartographer {
 namespace common {
 
