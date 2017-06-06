@@ -28,7 +28,10 @@
 
 namespace cartographer {
 namespace common {
+/*
+FileResolver是一个文件解析的虚基类,利用lua加载文件内容
 
+*/
 // Resolves file paths and file content for the Lua 'read' and 'include'
 // functions. Use this to configure where those functions load other files from.
 class FileResolver {
@@ -38,6 +41,13 @@ class FileResolver {
   virtual string GetFileContentOrDie(const string& basename) = 0;
 };
 
+/*
+LuaParameterDictionary类从lua加载参数.
+
+构造函数从lua加载配置table,不可拷贝不可赋值.
+
+
+*/
 // A parameter dictionary that gets loaded from Lua code.
 class LuaParameterDictionary {
  public:
