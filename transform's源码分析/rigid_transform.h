@@ -33,6 +33,11 @@ namespace transform {
 Rotation是指物体自身的旋转, 也就是我我们常说的旋转, 直观的理解就是我们的视野方向没有发生改变。
 Orientation则是物体本身没有动, 我们的视野方向发生了旋转。
 Rigid2是二维网格
+
+Translation()指定对象的2D translation（2D平移）。
+第一个参数对应X轴，第二个参数对应Y轴。如果第二个参数未提供，则默认值为0。　　　
+Identity():单位矩阵
+
 */
 template <typename FloatType>
 class Rigid2 {
@@ -40,28 +45,29 @@ class Rigid2 {
   using Vector = Eigen::Matrix<FloatType, 2, 1>;//2行1列
   using Rotation2D = Eigen::Rotation2D<FloatType>;
 
-  Rigid2()
+  Rigid2()                                      //默认2行1列,使用单位矩阵初始化,即前后不变换
       : translation_(Vector::Identity()), rotation_(Rotation2D::Identity()) {}
 
+                                                //根据给定的矩阵参数转换    
   Rigid2(const Vector& translation, const Rotation2D& rotation)
       : translation_(translation), rotation_(rotation) {}
 
-  Rigid2(const Vector& translation, const double rotation)
+  Rigid2(const Vector& translation, const double rotation)//给定参数,按倍率变换
       : translation_(translation), rotation_(rotation) {}
 
-  static Rigid2 Rotation(const double rotation) {
+  static Rigid2 Rotation(const double rotation) { //给定参数,
     return Rigid2(Vector::Zero(), rotation);
   }
 
-  static Rigid2 Rotation(const Rotation2D& rotation) {
+  static Rigid2 Rotation(const Rotation2D& rotation) {//给定参数,
     return Rigid2(Vector::Zero(), rotation);
   }
 
-  static Rigid2 Translation(const Vector& vector) {
+  static Rigid2 Translation(const Vector& vector) { //给定参数,
     return Rigid2(vector, Rotation2D::Identity());
   }
 
-  static Rigid2<FloatType> Identity() {
+  static Rigid2<FloatType> Identity() {             //返回单位矩阵
     return Rigid2<FloatType>(Vector::Zero(), Rotation2D::Identity());
   }
 
@@ -71,15 +77,15 @@ class Rigid2 {
                              rotation_.template cast<OtherType>());
   }
 
-  const Vector& translation() const { return translation_; }
+  const Vector& translation() const { return translation_; }//变换后的矩阵
 
   Rotation2D rotation() const { return rotation_; }
 
   double normalized_angle() const {
-    return common::NormalizeAngleDifference(rotation().angle());
+    return common::NormalizeAngleDifference(rotation().angle());//方位角,弧度[-pi;pi]
   }
 
-  Rigid2 inverse() const {
+  Rigid2 inverse() const {//求逆
     const Rotation2D rotation = rotation_.inverse();
     const Vector translation = -(rotation * translation_);
     return Rigid2(translation, rotation);
@@ -98,11 +104,11 @@ class Rigid2 {
   }
 
  private:
-  Vector translation_;//2行1列
-  Rotation2D rotation_;//Eigen::Rotation2D
+  Vector translation_;//2行1列 的矩阵.
+  Rotation2D rotation_;//Eigen::Rotation2D,方向角
 };
 
-//定义乘法操作符
+//定义 * 乘法操作符
 template <typename FloatType>
 Rigid2<FloatType> operator*(const Rigid2<FloatType>& lhs,
                             const Rigid2<FloatType>& rhs) {
@@ -118,7 +124,7 @@ typename Rigid2<FloatType>::Vector operator*(
   return rigid.rotation() * point + rigid.translation();
 }
 
-//定义<<运算符
+//定义 << 输出运算符
 // This is needed for gmock.
 template <typename T>
 std::ostream& operator<<(std::ostream& os,
@@ -202,6 +208,7 @@ class Rigid3 {
   Quaternion rotation_;
 };
 
+//乘法操作
 template <typename FloatType>
 Rigid3<FloatType> operator*(const Rigid3<FloatType>& lhs,
                             const Rigid3<FloatType>& rhs) {
@@ -217,6 +224,7 @@ typename Rigid3<FloatType>::Vector operator*(
   return rigid.rotation() * point + rigid.translation();
 }
 
+//输出运算符
 // This is needed for gmock.
 template <typename T>
 std::ostream& operator<<(std::ostream& os,
@@ -225,6 +233,7 @@ std::ostream& operator<<(std::ostream& os,
   return os;
 }
 
+//特化
 using Rigid3d = Rigid3<double>;
 using Rigid3f = Rigid3<float>;
 
