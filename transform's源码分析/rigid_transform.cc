@@ -28,7 +28,7 @@ namespace transform {
 
 namespace {
 
-Eigen::Vector3d TranslationFromDictionary(
+Eigen::Vector3d TranslationFromDictionary(  
     common::LuaParameterDictionary* dictionary) {
   const std::vector<double> translation = dictionary->GetArrayValuesAsDoubles();
   CHECK_EQ(3, translation.size()) << "Need (x, y, z) for translation.";
@@ -37,12 +37,18 @@ Eigen::Vector3d TranslationFromDictionary(
 
 }  // namespace
 
+//https://stackoverflow.com/questions/21412169/creating-a-rotation-matrix-with-pitch-yaw-roll-using-eigen
+/*
+typedef Matrix< double , 3 , 1> Eigen::Vector3d
+http://eigen.tuxfamily.org/dox/classEigen_1_1AngleAxis.html
+
+*/
 Eigen::Quaterniond RollPitchYaw(const double roll, const double pitch,
                                 const double yaw) {
-  const Eigen::AngleAxisd roll_angle(roll, Eigen::Vector3d::UnitX());
-  const Eigen::AngleAxisd pitch_angle(pitch, Eigen::Vector3d::UnitY());
-  const Eigen::AngleAxisd yaw_angle(yaw, Eigen::Vector3d::UnitZ());
-  return yaw_angle * pitch_angle * roll_angle;
+  const Eigen::AngleAxisd roll_angle(roll, Eigen::Vector3d::UnitX());//构造一个AngleAxisd对象
+  const Eigen::AngleAxisd pitch_angle(pitch, Eigen::Vector3d::UnitY());//同上
+  const Eigen::AngleAxisd yaw_angle(yaw, Eigen::Vector3d::UnitZ());//同上
+  return yaw_angle * pitch_angle * roll_angle; //返回4元组
 }
 
 transform::Rigid3d FromDictionary(common::LuaParameterDictionary* dictionary) {

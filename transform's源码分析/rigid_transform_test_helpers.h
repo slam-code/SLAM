@@ -38,7 +38,7 @@ template <typename T>
 Eigen::Transform<T, 3, Eigen::Affine> ToEigen(const Rigid3<T>& rigid3) {
   return Eigen::Translation<T, 3>(rigid3.translation()) * rigid3.rotation();
 }
-
+/*gmock模拟对象行为*/
 MATCHER_P2(IsNearly, rigid, epsilon,
            string(string(negation ? "isn't" : "is", " nearly ") +
                   rigid.DebugString())) {
