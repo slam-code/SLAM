@@ -34,6 +34,8 @@ namespace kalman_filter {
 
 namespace {
 
+/*定义函数AddDelta,当前状态State加上delta.
+*/
 PoseTracker::State AddDelta(const PoseTracker::State& state,
                             const PoseTracker::State& delta) {
   PoseTracker::State new_state = state + delta;
@@ -57,6 +59,8 @@ PoseTracker::State AddDelta(const PoseTracker::State& state,
   return new_state;
 }
 
+/*定义ComputeDelta()函数,计算State的差值delta
+*/
 PoseTracker::State ComputeDelta(const PoseTracker::State& origin,
                                 const PoseTracker::State& target) {
   PoseTracker::State delta = target - origin;
@@ -79,30 +83,32 @@ PoseTracker::State ComputeDelta(const PoseTracker::State& origin,
   return delta;
 }
 
-// Build a model matrix for the given time delta.
+// Build a model matrix for the given time delta.返回delta时间后的状态
 PoseTracker::State ModelFunction(const PoseTracker::State& state,
                                  const double delta_t) {
   CHECK_GT(delta_t, 0.);
 
   PoseTracker::State new_state;
-  new_state[PoseTracker::kMapPositionX] =
+  new_state[PoseTracker::kMapPositionX] =  //x=x+delta * v
       state[PoseTracker::kMapPositionX] +
       delta_t * state[PoseTracker::kMapVelocityX];
-  new_state[PoseTracker::kMapPositionY] =
+
+  new_state[PoseTracker::kMapPositionY] =  //y=y+delta* v
       state[PoseTracker::kMapPositionY] +
       delta_t * state[PoseTracker::kMapVelocityY];
-  new_state[PoseTracker::kMapPositionZ] =
+
+  new_state[PoseTracker::kMapPositionZ] =  //z=z+ delta* v
       state[PoseTracker::kMapPositionZ] +
       delta_t * state[PoseTracker::kMapVelocityZ];
 
-  new_state[PoseTracker::kMapOrientationX] =
+  new_state[PoseTracker::kMapOrientationX] =//不变
       state[PoseTracker::kMapOrientationX];
   new_state[PoseTracker::kMapOrientationY] =
       state[PoseTracker::kMapOrientationY];
   new_state[PoseTracker::kMapOrientationZ] =
       state[PoseTracker::kMapOrientationZ];
 
-  new_state[PoseTracker::kMapVelocityX] = state[PoseTracker::kMapVelocityX];
+  new_state[PoseTracker::kMapVelocityX] = state[PoseTracker::kMapVelocityX];//不变
   new_state[PoseTracker::kMapVelocityY] = state[PoseTracker::kMapVelocityY];
   new_state[PoseTracker::kMapVelocityZ] = state[PoseTracker::kMapVelocityZ];
 
@@ -111,13 +117,20 @@ PoseTracker::State ModelFunction(const PoseTracker::State& state,
 
 }  // namespace
 
+/*
+定义乘法操作,C=A*B
+*/
 PoseAndCovariance operator*(const transform::Rigid3d& transform,
                             const PoseAndCovariance& pose_and_covariance) {
-  GaussianDistribution<double, 6> distribution(
+
+  GaussianDistribution<double, 6> distribution(                             // 6行1列
       Eigen::Matrix<double, 6, 1>::Zero(), pose_and_covariance.covariance);
-  Eigen::Matrix<double, 6, 6> linear_transform;
+
+  Eigen::Matrix<double, 6, 6> linear_transform;                             //6行6列
+
   linear_transform << transform.rotation().matrix(), Eigen::Matrix3d::Zero(),
       Eigen::Matrix3d::Zero(), transform.rotation().matrix();
+
   return {transform * pose_and_covariance.pose,
           (linear_transform * distribution).GetCovariance()};
 }
@@ -141,6 +154,7 @@ proto::PoseTrackerOptions CreatePoseTrackerOptions(
   return options;
 }
 
+
 PoseTracker::Distribution PoseTracker::KalmanFilterInit() {
   State initial_state = State::Zero();
   // We are certain about the complete state at the beginning. We define the
@@ -149,6 +163,7 @@ PoseTracker::Distribution PoseTracker::KalmanFilterInit() {
   StateCovariance initial_covariance = 1e-9 * StateCovariance::Identity();
   return Distribution(initial_state, initial_covariance);
 }
+
 
 PoseTracker::PoseTracker(const proto::PoseTrackerOptions& options,
                          const common::Time time)

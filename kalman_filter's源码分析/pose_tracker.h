@@ -41,7 +41,7 @@ typedef Eigen::Matrix<double, 6, 6> PoseCovariance;// 6*6 矩阵
 
 struct PoseAndCovariance {
   transform::Rigid3d pose;
-  PoseCovariance covariance;
+  PoseCovariance covariance; //6*6
 };
 
 PoseAndCovariance operator*(const transform::Rigid3d& transform,
@@ -74,10 +74,10 @@ class PoseTracker {
     kDimension  //9, We terminate loops with this.
   };
 
-  using KalmanFilter = UnscentedKalmanFilter<double, kDimension>;
-  using State = KalmanFilter::StateType;
-  using StateCovariance = Eigen::Matrix<double, kDimension, kDimension>;
-  using Distribution = GaussianDistribution<double, kDimension>;
+  using KalmanFilter = UnscentedKalmanFilter<double, kDimension>;//9维的卡尔曼滤波
+  using State = KalmanFilter::StateType;                         //N*1矩阵
+  using StateCovariance = Eigen::Matrix<double, kDimension, kDimension>;//9*9
+  using Distribution = GaussianDistribution<double, kDimension>; //参数类型的double,9*1的矩阵
 
   // Create a new Kalman filter starting at the origin with a standard normal
   // distribution at 'time'.

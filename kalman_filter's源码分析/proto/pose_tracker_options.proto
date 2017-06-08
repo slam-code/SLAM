@@ -18,14 +18,14 @@ package cartographer.kalman_filter.proto;
 
 message PoseTrackerOptions {
   // Model variances depend linearly on time.
-  optional double position_model_variance = 1;
-  optional double orientation_model_variance = 2;
-  optional double velocity_model_variance = 3;
+  optional double position_model_variance = 1;    //位置方差
+  optional double orientation_model_variance = 2; //方向方差
+  optional double velocity_model_variance = 3;    //速度
 
   // Time constant for the orientation moving average based on observed gravity
   // via linear acceleration.
-  optional double imu_gravity_time_constant = 4;
-  optional double imu_gravity_variance = 5;
+  optional double imu_gravity_time_constant = 4; //时间
+  optional double imu_gravity_variance = 5;      //重力加速度方差 g
 
   // Maximum number of previous odometry states to keep.
   optional int32 num_odometry_states = 6;
