@@ -28,7 +28,7 @@ namespace {
 
 TEST(TransformInterpolationBufferTest, testHas) {
   TransformInterpolationBuffer buffer;
-  EXPECT_FALSE(buffer.Has(common::FromUniversal(50)));
+  EXPECT_FALSE(buffer.Has(common::FromUniversal(50)));//50us
   buffer.Push(common::FromUniversal(50), transform::Rigid3d::Identity());
   EXPECT_FALSE(buffer.Has(common::FromUniversal(25)));
   EXPECT_TRUE(buffer.Has(common::FromUniversal(50)));

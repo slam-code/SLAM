@@ -27,7 +27,7 @@ namespace transform {
 namespace {
 
 TEST(TransformTest, GetAngle) {
-  std::mt19937 rng(42);
+  std::mt19937 rng(42);//随机数种子
   std::uniform_real_distribution<float> angle_distribution(0.f, M_PI);
   std::uniform_real_distribution<float> position_distribution(-1.f, 1.f);
 
@@ -37,6 +37,8 @@ TEST(TransformTest, GetAngle) {
     const float y = position_distribution(rng);
     const float z = position_distribution(rng);
     const Eigen::Vector3f axis = Eigen::Vector3f(x, y, z).normalized();
+    //, for vectors, the l2 norm of *this, and for matrices the Frobenius norm. 
+    
     EXPECT_NEAR(angle,
                 GetAngle(Rigid3f::Rotation(AngleAxisVectorToRotationQuaternion(
                     Eigen::Vector3f(angle * axis)))),
