@@ -67,7 +67,7 @@ TEST_F(OrderedMultiQueueTest, Ordering) {
   queue_.Add(kFirst, MakeImu(4));
   queue_.Add(kFirst, MakeImu(5));
   queue_.Add(kFirst, MakeImu(6));
-  EXPECT_TRUE(values_.empty());  //为空?
+  EXPECT_TRUE(values_.empty());  //4, 为空?
 
 
   queue_.Add(kSecond, MakeImu(0));
@@ -84,7 +84,7 @@ TEST_F(OrderedMultiQueueTest, Ordering) {
 
   queue_.Add(kSecond, MakeImu(7));
   queue_.Add(kThird, MakeImu(8));
-  queue_.Flush();
+  queue_.Flush();//应该调用,否则出错
 
   EXPECT_EQ(11, values_.size());// f:4,s:4,t:3
   for (size_t i = 0; i < values_.size() - 1; ++i) { //检查是否按序

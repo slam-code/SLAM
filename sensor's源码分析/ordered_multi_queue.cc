@@ -34,6 +34,7 @@ const int kMaxQueueSize = 500;
 
 }  // namespace
 
+//重载<<输出运算符,友元函数
 inline std::ostream& operator<<(std::ostream& out, const QueueKey& key) {
   return out << '(' << key.trajectory_id << ", " << key.sensor_id << ')';
 }
@@ -46,7 +47,7 @@ OrderedMultiQueue::~OrderedMultiQueue() {
   }
 }
 
-//定义比较函数
+//添加一个关键词是key的队列,并定义比较函数
 void OrderedMultiQueue::AddQueue(const QueueKey& queue_key, Callback callback) {
   CHECK_EQ(queues_.count(queue_key), 0);
   queues_[queue_key].callback = std::move(callback);
@@ -57,10 +58,11 @@ void OrderedMultiQueue::MarkQueueAsFinished(const QueueKey& queue_key) {
   CHECK(it != queues_.end()) << "Did not find '" << queue_key << "'.";
   auto& queue = it->second;
   CHECK(!queue.finished);
-  queue.finished = true;
+  queue.finished = true;//标记本队列已完成,不能再入队.
   Dispatch();
 }
 
+//根据key找到队列,并添加data元素
 void OrderedMultiQueue::Add(const QueueKey& queue_key,
                             std::unique_ptr<Data> data) {
   auto it = queues_.find(queue_key);
@@ -73,6 +75,7 @@ void OrderedMultiQueue::Add(const QueueKey& queue_key,
   Dispatch();
 }
 
+//先找到没有finished的队列,然后再对这些队列标记finished
 void OrderedMultiQueue::Flush() {
   std::vector<QueueKey> unfinished_queues;
   for (auto& entry : queues_) {

@@ -48,7 +48,13 @@ struct QueueKey {
 
 
 /*
-有序的多队列,每个队列有一个key,并且有一个自定义排序函数
+OrderedMultiQueue是有序的多队列类,每个队列有一个key,并且有一个自定义排序函数
+数据成员有
+1,common_start_time_per_trajectory_
+2,last_dispatched_time_
+3,std::map<QueueKey, Queue> queues_;按照key排序的hash表
+4,QueueKey blocker_;
+
 */
 // Maintains multiple queues of sorted sensor data and dispatches(迅速办理) it in merge
 // sorted order. It will wait to see at least one value for each unfinished
@@ -80,6 +86,7 @@ class OrderedMultiQueue {
   // sorted per queue.
   void Add(const QueueKey& queue_key, std::unique_ptr<Data> data);
 
+//标记全部队列都已经finished
   // Dispatches all remaining values in sorted order and removes the underlying
   // queues.
   void Flush();
@@ -104,7 +111,7 @@ class OrderedMultiQueue {
   common::Time last_dispatched_time_ = common::Time::min();
 
   std::map<int, common::Time> common_start_time_per_trajectory_;
-  std::map<QueueKey, Queue> queues_;
+  std::map<QueueKey, Queue> queues_;//多队列主体,本类最大的内存占用量
   QueueKey blocker_;
 };
 
