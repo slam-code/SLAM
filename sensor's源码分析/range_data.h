@@ -27,14 +27,14 @@ namespace sensor {
 
 /*
 RangeData:
-原始光线,返回光线,缺失光线
+原始位置,返回点云光线,缺失点云光线
 */
 // Rays begin at 'origin'. 'returns' are the points where obstructions were
 // detected. 'misses' are points in the direction of rays for which no return
 // was detected, and were inserted at a configured distance. It is assumed that
 // between the 'origin' and 'misses' is free space.
 struct RangeData {
-  Eigen::Vector3f origin;
+  Eigen::Vector3f origin;//{x,y,z}
   PointCloud returns;
   PointCloud misses;
 };

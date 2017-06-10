@@ -113,7 +113,7 @@ CompressedPointCloud::CompressedPointCloud(const PointCloud& point_cloud)//point
   CHECK_LE(point_cloud.size(), std::numeric_limits<int>::max());
   for (int point_index = 0; point_index < static_cast<int>(point_cloud.size());
        ++point_index) {
-    const Eigen::Vector3f& point = point_cloud[point_index];
+    const Eigen::Vector3f& point = point_cloud[point_index];//获取某个point{x,y,z}
     CHECK_LT(point.cwiseAbs().maxCoeff() / kPrecision,
              1 << kMaxBitsPerDirection)
         << "Point out of bounds: " << point;

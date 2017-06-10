@@ -161,6 +161,8 @@ using Rigid2f = Rigid2<float>;
 http://blog.csdn.net/soilwork/article/details/1447346
 http://www.cnblogs.com/tgycoder/p/5103966.html
 
+旋转矩阵3d基础知识:
+https://zh.wikipedia.org/wiki/%E6%97%8B%E8%BD%AC%E7%9F%A9%E9%98%B5
 Quaternion.四元数,通常用quaternion来计算3D物体的旋转角度，与Matrix相比，quaternion更加高效，
 占用的储存空间更小，此外也更便于插值。在数学上，quaternion表示复数w+xi+yj+zk，其中i,j,k都是虚数单位
 
@@ -276,8 +278,16 @@ pitch是围绕X轴旋转，也叫做俯仰角
 yaw是围绕Y轴旋转，也叫偏航角
 roll是围绕Z轴旋转，也叫翻滚角
 
+或者:
 
-但是google采用三维 xyz:roll, pitch, yaw
+x-, y- 和 z-轴的旋转分别叫做 roll, pitch 和 yaw 旋转
+
+google采用三维 xyz:roll, pitch, yaw
+
+绕x轴:θx 是 roll 角，和右手螺旋的方向相反（在yz平面顺时针）:
+绕y轴:θy 是 pitch 角，和右手螺旋的方向相反（在zx平面顺时针）。
+绕z轴:θz 是yaw 角，和右手螺旋的方向相反（在xy平面顺时针）。
+
 */
 // Converts (roll, pitch, yaw) to a unit length quaternion. Based on the URDF
 // specification http://wiki.ros.org/urdf/XML/joint.
@@ -292,3 +302,13 @@ Rigid3d FromDictionary(common::LuaParameterDictionary* dictionary);
 }  // namespace cartographer
 
 #endif  // CARTOGRAPHER_TRANSFORM_RIGID_TRANSFORM_H_
+
+/*
+
+coefficient-wise operations系数操作
+
+the Array class provides an easy way to perform coefficient-wise operations,
+which might not have a linear algebraic meaning,
+such as adding a constant to every coefficient in the array or 
+multiplying two arrays coefficient-wise.
+*/

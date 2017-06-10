@@ -100,9 +100,9 @@ void OrderedMultiQueue::Dispatch() {
     QueueKey next_queue_key;
     for (auto it = queues_.begin(); it != queues_.end();) {
       const auto* data = it->second.queue.Peek<Data>();
-      if (data == nullptr) {
-        if (it->second.finished) {
-          queues_.erase(it++);
+      if (data == nullptr) { 
+        if (it->second.finished) {//it对应的队列为空,故删除it对应的key
+          queues_.erase(it++);//迭代器没有失效?
           continue;
         }
         CannotMakeProgress(it->first);
@@ -154,7 +154,7 @@ void OrderedMultiQueue::Dispatch() {
 
 void OrderedMultiQueue::CannotMakeProgress(const QueueKey& queue_key) {
   blocker_ = queue_key;
-  for (auto& entry : queues_) {
+  for (auto& entry : queues_) {//std::map<QueueKey, Queue> 
     if (entry.second.queue.Size() > kMaxQueueSize) {
       LOG_EVERY_N(WARNING, 60) << "Queue waiting for data: " << queue_key;
       return;

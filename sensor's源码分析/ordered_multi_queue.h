@@ -50,7 +50,7 @@ struct QueueKey {
 /*
 OrderedMultiQueue是有序的多队列类,每个队列有一个key,并且有一个自定义排序函数
 数据成员有
-1,common_start_time_per_trajectory_
+1,common_start_time_per_trajectory_:轨迹id及对应创建轨迹时间
 2,last_dispatched_time_
 3,std::map<QueueKey, Queue> queues_;按照key排序的hash表
 4,QueueKey blocker_;
@@ -91,6 +91,7 @@ class OrderedMultiQueue {
   // queues.
   void Flush();
 
+/*返回正在阻塞的队列(正在工作)*/
   // Must only be called if at least one unfinished queue exists. Returns the
   // key of a queue that needs more data before the OrderedMultiQueue can
   // dispatch data.
