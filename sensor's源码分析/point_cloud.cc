@@ -28,10 +28,10 @@ namespace sensor {
 */
 PointCloud TransformPointCloud(const PointCloud& point_cloud,
                                const transform::Rigid3f& transform) {
-  PointCloud result;                                //3*1的vector
+  PointCloud result;                                //3*1f的vector
   result.reserve(point_cloud.size());               //分配内存
   for (const Eigen::Vector3f& point : point_cloud) { 
-    result.emplace_back(transform * point);         //C=A*B
+    result.emplace_back(transform * point);         //C=A*B //3*3
   }
   return result;
 }

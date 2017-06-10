@@ -36,7 +36,7 @@ transformation:变换
 translation:平移
 rotation:旋转
 scaling:缩放
-
+ counter clock wise rotation:逆时针旋转
  
 Rotation是指物体自身的旋转, 也就是我我们常说的旋转, 直观的理解就是我们的视野方向没有发生改变。
 Orientation则是物体本身没有动, 我们的视野方向发生了旋转。
@@ -53,6 +53,9 @@ Translation()指定对象的2D translation（2D平移）。
 第一个参数对应X轴，第二个参数对应Y轴。默认是单位变换。　　　
 Identity():单位矩阵
 
+[x'       [cosθ , -sinθ           [ x,
+ y']   =   sinθ ,  cosθ ]   *       y ]
+
 */
 template <typename FloatType>
 class Rigid2 {
@@ -63,7 +66,8 @@ class Rigid2 {
   Rigid2()                                      //默认2行1列,使用单位矩阵初始化,即变换前后是一样的.
       : translation_(Vector::Identity()), rotation_(Rotation2D::Identity()) {}
 
-                                                //根据给定的矩阵参数转换 ,给定矩阵和变换角度   
+//根据给定的矩阵参数转换: 给定矩阵和变换角度  
+//Rotation2D(double ): Construct a 2D counter clock wise rotation from the angle a in radian. 
   Rigid2(const Vector& translation, const Rotation2D& rotation)
       : translation_(translation), rotation_(rotation) {}
 
