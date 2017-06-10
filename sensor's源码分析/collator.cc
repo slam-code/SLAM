@@ -49,12 +49,18 @@ void Collator::AddTrajectory(
   }
 }
 
+
+/*队列不再接收数据*/
 void Collator::FinishTrajectory(const int trajectory_id) {
   for (const auto& queue_key : queue_keys_[trajectory_id]) {
     queue_.MarkQueueAsFinished(queue_key);
   }
 }
 
+
+/*
+主要的操作,添加传感器数据,数据形式是:key+data
+*/
 void Collator::AddSensorData(const int trajectory_id, const string& sensor_id,
                              std::unique_ptr<Data> data) {
   queue_.Add(QueueKey{trajectory_id, sensor_id}, std::move(data));

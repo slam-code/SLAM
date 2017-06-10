@@ -84,7 +84,7 @@ TEST(Collator, Ordering) {
 
   collator.Flush();  //刷新
 
-  ASSERT_EQ(10, received.size()); 
+  ASSERT_EQ(10, received.size());         //10个数据
   EXPECT_EQ(kSensorId[0], received[7].first);
   EXPECT_EQ(500, common::ToUniversal(received[8].second.time));
   EXPECT_EQ(kSensorId[1], received[8].first);
