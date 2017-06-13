@@ -1,0 +1,179 @@
+
+
+Ply文件由MeshLab导出生成，格式可能和其他软件导出的有出入。
+本来想把模型文件贴上来，但是找了一下好像不能上传，希望着可留言。
+这里贴一下模型文件的开头部分。
+-------------------------------------------------------
+ply
+format ascii 1.0
+comment VCGLIB generated
+element vertex 6479
+property float x
+property float y
+property float z
+property float nx
+property float ny
+property float nz
+property int flags
+property uchar red
+property uchar green
+property uchar blue
+property uchar alpha
+element face 12954
+property list uchar int vertex_indices
+property int flags
+end_header
+0.0363526 0.0894518 0.0166275 -2.58589 -5.26492 -2.22414 0 175 160 84 255 
+0.0389934 0.088225 0.0166275 -2.52566 -5.33 -2.15753 0 170 156 88 255 
+0.0389934 0.0894518 0.0138336 -2.41584 -5.1918 -2.5521 0 146 145 86 255 
+0.0340731 0.0894518 0.0200012 -2.865 -5.39322 -1.43764 0 174 151 78 255 
+0.0356197 0.0886338 0.0200012 -2.74755 -5.42387 -1.53245 0 168 145 74 255 
+0.0356197 0.0894518 0.0175829 -2.64306 -5.36739 -1.90754 0 171 156 75 255 
+......
+-------------------------------------------------------
+
+
+//http://blog.csdn.net/pyang1989/article/details/23799297
+
+
+Ply文件格式是Stanford大学开发的一套三维mesh模型数据格式，图形学领域内很多著名的模型数据，比如Stanford的三维扫描数据库[1]（其中包括很多文章中会见到的Happy Buddha、Dragon、Bunny兔子），Geogia Tech的大型几何模型库[3]，北卡（UNC）的电厂模型[4]等，最初的模型都是基于这个格式的。
+
+PLY多边形文件格式的开发目标是建立一套针对多边形模型的，结构简单但是能够满足大多数图形应用需要的模型格式，而且它允许以ASCII码格式或二进制形式存储文件。PLY的开发者希望，这样一套既简单又灵活的文件格式，能够帮助开发人员避免重复开发文件格式的问题。然而由于各种各样的原因，在工业领域内，新的文件格式仍然在不断的出现，但是在图形学的研究领域中，PLY还是种常用且重要的文件格式。
+
+PLY作为一种多边形模型数据格式，不同于三维引擎中常用的场景图文件格式和脚本文件，每个PLY文件只用于描述一个多边形模型对象（Object），该模型对象可以通过诸如顶点、面等数据进行描述，每一类这样的数据被称作一种元素（Element）。相比于现代的三维引擎中所用到的各种复杂格式，PLY实在是种简单的不能再简单的文件格式，但是如果仔细研究就会发现，就像设计者所说的，这对于绝大多数的图形应用来说已经是足够用了。
+
+PLY的文件结构同样很简单：文件头加上元素数据列表。其中文件头中以行为单位描述文件类型、格式与版本、元素类型、元素的属性等，然后就根据在文件头中所列出元素类型的顺序及其属性，依次记录各个元素的属性数据。
+
+下面这个例子是一个典型的ASCII格式的PLY文件，其所描述的是一个立方体。
+ply
+
+format ascii 1.0             { 文件类型：ascii或binary，版本号 }
+
+comment made by anonymous    { 注释行 }
+
+comment this file is a cube  { 注释行 }
+
+element vertex 8             { 定义“顶点”元素，其数量为8个 }
+
+property float32 x           { 顶点的x属性，数据类型为float32 }
+
+property float32 y           { 顶点的x属性，数据类型为float32 }
+
+property float32 z           { 顶点的x属性，数据类型为float32 }
+
+element face 6               { 定义“面”元素，其数量为6个 }
+
+property list uint8 int32 vertex_index { 面的顶点索引属性，类型为uint8的列表 }
+
+end_header                   { 文件头结束标志 }
+
+0 0 0                        { 顶点元素列表 }
+
+0 0 1
+
+0 1 1
+
+0 1 0
+
+1 0 0
+
+1 0 1
+
+1 1 1
+
+1 1 0
+
+4 0 1 2 3                    { 面元素列表 }
+
+4 7 6 5 4
+
+4 0 4 5 1
+
+4 1 5 6 2
+
+4 2 6 7 3
+
+4 3 7 4 0
+
+从这个文件的文件头可以看到，文件定义的对象由8个顶点元素和6个多边形面元素组成，其中顶点元素包括x、y、z三个属性，其在文件中均为32位浮点类型，而多边形面元素则只包括一个顶点索引列表的属性，作为一个列表属性，它包括两部分，即列表元素的数量（uint8类型）及各个列表元素（int32类型），其中每个列表属性的数据包括4个列表元素，分别表示每个多边形面的4个顶点的索引。
+
+PLY格式支持如下的数据类型。 
+
+name        type        number of bytes
+
+---------------------------------------
+
+int8       character                       1
+
+uint8      unsigned character        1
+
+int16      short integer                 2
+
+uint16     unsigned short integer  2
+
+int32      integer                          4
+
+uint32     unsigned integer           4
+
+float32    single-precision float    4
+
+float64    double-precision float  8
+
+但是需要注意，由于PLY格式的开放性，有些PLY文件的解析程序不支持全部的数据类型，也有的PLY文件采用自定义的数据类型，这些都有可能导致文件解析过程的失败。（我在一次将PLY文件加载到Ogre应用的时候，出于测试的目的手动写了一个PLY文件，加载总是失败，反复查找才发现原来是文件中写的顶点格式为uint32，加载程序根本不支持。）
+
+对于元素的属性定义方式，PLY允许单一属性定义：
+
+property <data-type> <property-name-1>
+
+以及列表属性方式：
+
+property list <numerical-type> <numerical-type> <property-name>
+
+其中第一个数据类型描述列表元素数量，第二个数据类型描述每个列表元素。
+
+除了顶点和多边形面两种基本元素外，PLY文件格式允许使用自定义的元素和元素属性，称为Other Element和Other Property。只要遵循文件格式中对元素及元素属性的格式定义，就能够被正常的解析，这也是PLY格式所具备的灵活性特色。
+
+
+PLY文件格式的规范及其解析的源代码都是开放的，可以从参考文献中找到相关的下载。最著名的就是Greg Turk在1994年发布的解析代码，Turk似乎也是PLY格式的开发者之一，因为我参考的“The PLY Polygon File Format”就是他写的。我现在用的就是Turk的代码，很方便也挺稳定的，有机会会把结构分析一下。
+
+
+
+
+
+
+
+http://blog.csdn.net/rickarkin/article/details/1845870
+
+
+
+
+
+只要你理解了ply文件的结构,就很容量实现了.
+就比如:
+BMP图像数据保存是这样的:先保存图像的文件头,再保存图像的信息头,再保存一个颜色表,最后才是图像数据.
+(下面就以图像的文件头作详细说明)
+图像的文件头的信息如下:
+ 偏移             意义
+0-1字节       .BMP文件的标志
+2-5字节       给出位图文件的大小
+6-7字节       保留并必须置为0
+8-9字节       保留并必须置为0
+10-13字节     位图阵列的偏移值
+那么你想读图像的文件头时,你就可以定义如下的一个结构体来保存读到的数据:
+typedef struct
+{
+ char bfType[2];      /*用来保存.BMP文件的标志*/
+ long bfSize;          /*用来保存位图文件的大小*/
+ int  bfReserved1;     /*用来保存保留字节*/
+ int  bfReserved2;     /*用来保存保留字节*/
+ long bfOffBits;       /*用来保存位图阵列偏移量*/
+}BMPHEAD;
+这个结构体和上面的图像的文件头的偏移一一对应.
+这样读文件时,首先用fopen()函数打开文件,用fread()函数将文件的数据读到结构体中就可以了.
+读ply文件时用一样的方法就OK了
+
+ Opengl学习笔记：（一）.Ply文件文件格式和文件读取:
+ http://blog.csdn.net/sinat_20530977/article/details/44805107
+ http://blog.csdn.net/pyang1989/article/details/23799297
+ http://blog.csdn.net/lxfyzx/article/details/4997627
+
