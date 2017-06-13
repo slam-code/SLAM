@@ -42,9 +42,11 @@ class FileResolver {
 };
 
 /*
-LuaParameterDictionary类从lua加载参数.
+LuaParameterDictionary类继承自FileResolver,
+目的是从lua配置文件加载参数.该类不可拷贝不可赋值.
 
-构造函数从lua加载配置table,不可拷贝不可赋值.
+1,构造函数从file_resolver中加载一个带lua table的字典dictionary
+2,
 
 
 */

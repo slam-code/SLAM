@@ -1,0 +1,13 @@
+http://www.runoob.com/lua/lua-tutorial.html
+http://blog.csdn.net/maximuszhou/article/details/24105673
+http://blog.csdn.net/xuzhonghai/article/details/8490547
+
+table是Lua语言中的一种重要的数据类型， table 的一些特性简单列举如下： 
+(1).table 是一个“关联数组”，数组的索引可以是数字或者是字符串; 
+(2).table 的默认初始索引一般以 1 开始; 
+(3).table 的变量只是一个地址引用，对 table 的操作不会产生数据影响; 
+(4).table 不会固定长度大小，有新数据插入时长度会自动增长; 
+(5).table 所有索引值都需要用 “[“和”]” 括起来；如果是字符串，还可以去掉引号和中括号； 即如果没有[]括起，则认为是字符串索引; 
+(6).table 所有元素之间，总是用逗号 “，” 隔开；
+
+lua提供了一些辅助函数来操作table，例如insert、remove等。

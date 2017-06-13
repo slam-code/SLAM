@@ -28,6 +28,7 @@ namespace cartographer {
 namespace common {
 namespace {
 
+/*返回一个智能指针,指向DummyFileResolver*/
 std::unique_ptr<LuaParameterDictionary> MakeNonReferenceCounted(
     const string& code) {
   return LuaParameterDictionary::NonReferenceCounted(
@@ -45,43 +46,44 @@ class LuaParameterDictionaryTest : public ::testing::Test {
 
 TEST_F(LuaParameterDictionaryTest, GetInt) {
   auto dict = MakeDictionary("return { blah = 100 }");
-  ASSERT_EQ(dict->GetInt("blah"), 100);
+  ASSERT_EQ(dict->GetInt("blah"), 100);             // blah==100
 }
 
 TEST_F(LuaParameterDictionaryTest, GetString) {
   auto dict = MakeDictionary("return { blah = 'is_a_string' }\n");
-  ASSERT_EQ(dict->GetString("blah"), "is_a_string");
+  ASSERT_EQ(dict->GetString("blah"), "is_a_string");//blah = 'is_a_string'  
 }
 
 TEST_F(LuaParameterDictionaryTest, GetDouble) {
   auto dict = MakeDictionary("return { blah = 3.1415 }");
-  ASSERT_DOUBLE_EQ(dict->GetDouble("blah"), 3.1415);
+  ASSERT_DOUBLE_EQ(dict->GetDouble("blah"), 3.1415); //blah = 3.1415
 }
 
 TEST_F(LuaParameterDictionaryTest, GetBoolTrue) {
   auto dict = MakeDictionary("return { blah = true }");
-  ASSERT_TRUE(dict->GetBool("blah"));
+  ASSERT_TRUE(dict->GetBool("blah"));                //blah = true
 }
 
 TEST_F(LuaParameterDictionaryTest, GetBoolFalse) {
   auto dict = MakeDictionary("return { blah = false }");
-  ASSERT_FALSE(dict->GetBool("blah"));
+  ASSERT_FALSE(dict->GetBool("blah"));              // blah = false 
 }
 
 TEST_F(LuaParameterDictionaryTest, GetDictionary) {
   auto dict =
       MakeDictionary("return { blah = { blue = 100, red = 200 }, fasel = 10 }");
 
+  //sub_dict 是一个子字典
   std::unique_ptr<LuaParameterDictionary> sub_dict(dict->GetDictionary("blah"));
-  std::vector<string> keys = sub_dict->GetKeys();
-  ASSERT_EQ(keys.size(), 2);
-  std::sort(keys.begin(), keys.end());
+  std::vector<string> keys = sub_dict->GetKeys();//blah下的key
+  ASSERT_EQ(keys.size(), 2);                     //2个key,blue,red
+  std::sort(keys.begin(), keys.end());           //顺序不定
   ASSERT_EQ(keys[0], "blue");
   ASSERT_EQ(keys[1], "red");
   ASSERT_TRUE(sub_dict->HasKey("blue"));
   ASSERT_TRUE(sub_dict->HasKey("red"));
-  ASSERT_EQ(sub_dict->GetInt("blue"), 100);
-  ASSERT_EQ(sub_dict->GetInt("red"), 200);
+  ASSERT_EQ(sub_dict->GetInt("blue"), 100);      //blue==100
+  ASSERT_EQ(sub_dict->GetInt("red"), 200);       //red==10
 
   ASSERT_EQ(dict->GetString("fasel"), "10");
 }
@@ -89,7 +91,7 @@ TEST_F(LuaParameterDictionaryTest, GetDictionary) {
 TEST_F(LuaParameterDictionaryTest, GetKeys) {
   auto dict = MakeDictionary("return { blah = 100, blah1 = 200}");
 
-  std::vector<string> keys = dict->GetKeys();
+  std::vector<string> keys = dict->GetKeys(); //返回key组成的string
   ASSERT_EQ(keys.size(), 2);
   std::sort(keys.begin(), keys.end());
   ASSERT_EQ(keys[0], "blah");
@@ -101,12 +103,12 @@ TEST_F(LuaParameterDictionaryTest, GetKeys) {
 TEST_F(LuaParameterDictionaryTest, NonExistingKey) {
   auto dict = MakeDictionary("return { blah = 100 }");
   ReferenceAllKeysAsIntegers(dict.get());
-  ASSERT_DEATH(dict->GetInt("blah_fasel"), "Key.* not in dictionary.");
+  ASSERT_DEATH(dict->GetInt("blah_fasel"), "Key.* not in dictionary.");//key不存在
 }
 
 TEST_F(LuaParameterDictionaryTest, UintNegative) {
   auto dict = MakeDictionary("return { blah = -100}");
-  ASSERT_DEATH(dict->GetNonNegativeInt("blah"), ".*-100 is negative.");
+  ASSERT_DEATH(dict->GetNonNegativeInt("blah"), ".*-100 is negative.");//key对应的value是负数
   ReferenceAllKeysAsIntegers(dict.get());
 }
 
@@ -134,13 +136,13 @@ TEST_F(LuaParameterDictionaryTest, ToString) {
   fasel1 = -math.huge,
   fasel2 = math.huge,
 })";
-  EXPECT_EQ(golden, dict->ToString());
+  EXPECT_EQ(golden, dict->ToString()); //相等,dict 开始的return 不包含在内
 
   auto dict1 = MakeDictionary("return " + dict->ToString());
 
   EXPECT_EQ(dict1->GetBool("alpha"), true);
   EXPECT_EQ(dict1->GetBool("alpha1"), false);
-  EXPECT_EQ(dict1->GetInt("blubber"), 123);
+  EXPECT_EQ(dict1->GetInt("blubber"), 123);  //获取整数
   EXPECT_EQ(dict1->GetString("blub"), "hello");
   EXPECT_EQ(dict1->GetDictionary("ceta")->GetString("yolo"), "hurray");
   EXPECT_NEAR(dict1->GetDouble("fasel"), 1234.456786, 1e-3);
