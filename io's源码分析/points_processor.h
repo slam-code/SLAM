@@ -24,6 +24,12 @@
 namespace cartographer {
 namespace io {
 
+/*
+PointsProcessor 虚基类,提供一种处理point的抽象接口,不可拷贝/赋值
+
+
+
+*/
 // A processor in a pipeline. It processes a 'points_batch' and hands it to the
 // next processor in the pipeline.
 class PointsProcessor {

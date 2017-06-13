@@ -31,7 +31,8 @@ namespace io {
 using Color = std::array<uint8_t, 3>;
 
 /*
-
+PointsBatch 是对多个point的抽象.这些point在由同一时刻,同一地点的传感器采集而得。
+数据成员主要描述了point的特性
 
 */
 
@@ -44,21 +45,21 @@ struct PointsBatch {
     trajectory_index = 0;
   }
 
-  // Time at which this batch has been acquired.
-  common::Time time;
+  // Time at which this batch has been acquired. point被采集的时间点
+  common::Time time; 
 
   // Origin of the data, i.e. the location of the sensor in the world at
-  // 'time'.
-  Eigen::Vector3f origin;
+  // 'time'. 传感器位姿
+  Eigen::Vector3f origin; 
 
   // Sensor that generated this data's 'frame_id' or empty if this information
-  // is unknown.
+  // is unknown. 关键帧的id
   string frame_id;
 
-  // Trajectory index that produced this point.
+  // Trajectory index that produced this point. 轨迹线
   int trajectory_index;
 
-  // Geometry of the points in a metric frame.
+  // Geometry of the points in a metric frame. 公制，point的几何参数
   std::vector<Eigen::Vector3f> points;
 
   // Intensities are optional and may be unspecified. The meaning of these
@@ -66,13 +67,13 @@ struct PointsBatch {
   // in the range [0, 100] for non-specular return values and values up to 255
   // for specular returns. On the other hand, Hokuyo lasers provide a 16-bit
   // value that rarely peaks above 4096.
-  std::vector<float> intensities;
+  std::vector<float> intensities; //光强度，可选项
 
-  // Colors are optional. If set, they are RGB values.
+  // Colors are optional. If set, they are RGB values.彩色rgb数字
   std::vector<Color> colors;
 };
 
-// Removes the indices in 'to_remove' from 'batch'.
+// Removes the indices in 'to_remove' from 'batch'. 按照to_temove中的索引,在batch中移除单个point
 void RemovePoints(std::vector<int> to_remove, PointsBatch* batch);
 
 }  // namespace io

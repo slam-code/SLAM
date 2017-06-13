@@ -20,14 +20,19 @@ namespace cartographer {
 namespace io {
 
 void RemovePoints(std::vector<int> to_remove, PointsBatch* batch) {
-  std::sort(to_remove.begin(), to_remove.end(), std::greater<int>());
+  std::sort(to_remove.begin(), to_remove.end(), std::greater<int>()); //降序排列
+
+  /*
+batch->points是vector,index 是要移除的vector元素的索引
+
+  */
   for (const int index : to_remove) {
-    batch->points.erase(batch->points.begin() + index);
+    batch->points.erase(batch->points.begin() + index); //移除point
     if (!batch->colors.empty()) {
-      batch->colors.erase(batch->colors.begin() + index);
+      batch->colors.erase(batch->colors.begin() + index); //point对应的rgb
     }
     if (!batch->intensities.empty()) {
-      batch->intensities.erase(batch->intensities.begin() + index);
+      batch->intensities.erase(batch->intensities.begin() + index); //point对应的光强度
     }
   }
 }
