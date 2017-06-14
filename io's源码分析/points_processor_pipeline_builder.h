@@ -31,9 +31,9 @@ namespace io {
 
 /*
 工厂模式,
-PointsProcessorPipelineBuilder类用于创建各个ProcessorPiont对象
+PointsProcessorPipelineBuilder类用于创建各个ProcessorPiont类对象
 
-
+RegisterBuiltInPointsProcessors()函数可用于创建所有cartographer内置class.
 */
 // Builder to create a points processor pipeline out of a Lua configuration.
 // You can register all built-in PointsProcessors using
@@ -44,7 +44,7 @@ PointsProcessorPipelineBuilder类用于创建各个ProcessorPiont对象
 class PointsProcessorPipelineBuilder {
  public:
 
-  //f(dictionary,next);   返回值是std::unique_ptr<PointsProcessor>
+  //FactoryFunction是函数f(dictionary,next);   返回值为std::unique_ptr<PointsProcessor>
   using FactoryFunction = std::function<std::unique_ptr<PointsProcessor> (
       common::LuaParameterDictionary*, PointsProcessor* next) >;
 
