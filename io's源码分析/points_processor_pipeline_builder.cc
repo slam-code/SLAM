@@ -34,7 +34,7 @@ namespace cartographer {
 namespace io {
 
 /*
-普通的points处理类
+普通的points Processor 处理类
 */
 template <typename PointsProcessorType>
 void RegisterPlainPointsProcessor(
@@ -51,7 +51,7 @@ void RegisterPlainPointsProcessor(
 
 /*
 
-写入到文件的points处理类
+写入到文件的points Processor 处理类
 */
 template <typename PointsProcessorType>
 void RegisterFileWritingPointsProcessor(

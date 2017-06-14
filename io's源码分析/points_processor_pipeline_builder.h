@@ -63,7 +63,11 @@ class PointsProcessorPipelineBuilder {
       common::LuaParameterDictionary* dictionary) const;
 
  private:
-  std::unordered_map<std::string, FactoryFunction> factories_;
+
+  //hash表,记录已经注册的points processor及其对应的function
+  //key是每个class都有的kConfigurationFileActionName
+  std::unordered_map<std::string, FactoryFunction> factories_; 
+
 };
 
 // Register all 'PointsProcessor' that ship with Cartographer with this
