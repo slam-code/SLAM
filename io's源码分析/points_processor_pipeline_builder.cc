@@ -34,24 +34,28 @@ namespace cartographer {
 namespace io {
 
 /*
-普通的points Processor 处理类
+普通的points Processor 处理类,只有1个参数
 */
 template <typename PointsProcessorType>
 void RegisterPlainPointsProcessor(
-    PointsProcessorPipelineBuilder* const builder) {
+    PointsProcessorPipelineBuilder* const builder) 
+
+{
   builder->Register(
       PointsProcessorType::kConfigurationFileActionName,//每个类有一个kConfigurationFileActionName
 
       //第二参数是FactoryFunction,即为函数 f(dictionary,next),返回值是std::unique_ptr<PointsProcessor>
       [](common::LuaParameterDictionary* const dictionary,
-         PointsProcessor* const next) -> std::unique_ptr<PointsProcessor> {
+         PointsProcessor* const next) 
+      -> std::unique_ptr<PointsProcessor>
+       {
         return PointsProcessorType::FromDictionary(dictionary, next);
       });
 }
 
 /*
 
-写入到文件的points Processor 处理类
+写入到文件的points Processor 处理类,2个参数,文件写入factory和PointsProcessorPipelineBuilder*
 */
 template <typename PointsProcessorType>
 void RegisterFileWritingPointsProcessor(
@@ -63,39 +67,53 @@ void RegisterFileWritingPointsProcessor(
       PointsProcessorType::kConfigurationFileActionName,
       [file_writer_factory](
           common::LuaParameterDictionary* const dictionary,
-          PointsProcessor* const next) -> std::unique_ptr<PointsProcessor> {
+          PointsProcessor* const next)
+
+           -> std::unique_ptr<PointsProcessor>
+
+           {
         return PointsProcessorType::FromDictionary(file_writer_factory,
                                                    dictionary, next);
       });
 
 }
 
+/*.h文件对外的接口,主要的代码逻辑*/
 void RegisterBuiltInPointsProcessors(
     const mapping::proto::Trajectory& trajectory,
     FileWriterFactory file_writer_factory,
     PointsProcessorPipelineBuilder* builder) 
 
 {
-  RegisterPlainPointsProcessor<CountingPointsProcessor>(builder);
+  RegisterPlainPointsProcessor<CountingPointsProcessor>(builder);           //注册一个实例
   RegisterPlainPointsProcessor<FixedRatioSamplingPointsProcessor>(builder);
   RegisterPlainPointsProcessor<MinMaxRangeFiteringPointsProcessor>(builder);
   RegisterPlainPointsProcessor<OutlierRemovingPointsProcessor>(builder);
   RegisterPlainPointsProcessor<ColoringPointsProcessor>(builder);
-  RegisterPlainPointsProcessor<IntensityToColorPointsProcessor>(builder);
-  RegisterFileWritingPointsProcessor<PcdWritingPointsProcessor>(
+  RegisterPlainPointsProcessor<IntensityToColorPointsProcessor>(builder);  //注册一个实例
+
+
+  RegisterFileWritingPointsProcessor<PcdWritingPointsProcessor>(           //...
       file_writer_factory, builder);
   RegisterFileWritingPointsProcessor<PlyWritingPointsProcessor>(
       file_writer_factory, builder);
-  RegisterFileWritingPointsProcessor<XyzWriterPointsProcessor>(
+  RegisterFileWritingPointsProcessor<XyzWriterPointsProcessor>(            //...
       file_writer_factory, builder);
 
-  // X-Ray is an odd ball since it requires the trajectory to figure out the
+  // X-Ray is an odd ball(古怪的) since it requires the trajectory to figure out the
   // different building levels we walked on to separate the images.
   builder->Register(
       XRayPointsProcessor::kConfigurationFileActionName,
-      [&trajectory, file_writer_factory](
+      [&trajectory, file_writer_factory]
+
+      (
           common::LuaParameterDictionary* const dictionary,
-          PointsProcessor* const next) -> std::unique_ptr<PointsProcessor> {
+          PointsProcessor* const next
+          ) 
+
+      -> std::unique_ptr<PointsProcessor> 
+
+      {
         return XRayPointsProcessor::FromDictionary(
             trajectory, file_writer_factory, dictionary, next);
       });
@@ -112,6 +130,12 @@ void PointsProcessorPipelineBuilder::Register(const std::string& name,
 
 PointsProcessorPipelineBuilder::PointsProcessorPipelineBuilder() {}
 
+
+/*
+vector<unique_ptr<PointsProcessor>>  pipeline 是points 处理类的集合.
+第一个是空指针NullPointsProcessor类,最后调用,用于丢弃所有的points,
+其余的按照逆序添加到pipeline中
+*/
 std::vector<std::unique_ptr<PointsProcessor>>
 PointsProcessorPipelineBuilder::CreatePipeline(
     common::LuaParameterDictionary* const dictionary) const {
