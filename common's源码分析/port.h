@@ -36,7 +36,7 @@ in.push(file_source("test.txt"));
    
 
 */
-#include <boost/iostreams/filter/gzip.hpp>//包含六的解压与压缩算法
+#include <boost/iostreams/filter/gzip.hpp>//包含六种解压与压缩算法
 #include <boost/iostreams/filtering_stream.hpp>//配合filter实现流过滤
 
 using int8 = int8_t;
@@ -75,7 +75,7 @@ inline void FastGzipString(const string& uncompressed, string* compressed) {
 }
 /*
 reinterpret_cast的转换格式：reinterpret_cast <type-id> (expression)
-http://www.jellythink.com/archives/205">强制转换博客地址
+http://www.jellythink.com/archives/205
 允许将任何指针类型转换为其它的指针类型；听起来很强大，但是也很不靠谱。
 它主要用于将一种数据类型从一种类型转换为另一种类型。它可以将一个指针转换成一个整数，
 也可以将一个整数转换成一个指针，在实际开发中，先把一个指针转换成一个整数，

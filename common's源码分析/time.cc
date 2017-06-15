@@ -33,7 +33,8 @@ double ToSeconds(const Duration duration) {
 }
 
 //先构造一个临时duration对象,再将其转化为time_point对象
-Time FromUniversal(const int64 ticks) { return Time(Duration(ticks)); }      
+//Duration(ticks)调用的是UniversalTimeScaleClock的构造函数     
+Time FromUniversal(const int64 ticks) { return Time(Duration(ticks)); } 
 
 
 //count()返回time_point自epoch以来的时钟周期数

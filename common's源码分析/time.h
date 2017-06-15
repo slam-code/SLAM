@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-
+//http://blog.chinaunix.net/uid-20532339-id-1931780.html
+//https://stackoverflow.com/questions/2883576/how-do-you-convert-epoch-time-in-c/7844741#7844741
+//https://www.epochconverter.com/batch
  /*
  预备知识: c++11 提供了语言级别的时间函数.包括duration和time_point
 duration是时间段,指的是某单位时间上的一个明确的tick(片刻数),3分钟->"3个1分钟",1.5个"1/3秒" :1.5是tick,1/3秒是时间单位
@@ -34,6 +36,7 @@ time_point是一个duration和一个epoch(起点)的组合,如2017年5月4日是
 namespace cartographer {
 namespace common {
 
+//719162 是0001年1月1日到1970年1月1日所经历的天数
 constexpr int64 kUtsEpochOffsetFromUnixEpochInSeconds =
     (719162ll * 24ll * 60ll * 60ll);
 
@@ -42,6 +45,7 @@ struct UniversalTimeScaleClock {
   using period = std::ratio<1, 10000000>; //百万分之一秒,微秒,us
   using duration = std::chrono::duration<rep, period>;
   using time_point = std::chrono::time_point<UniversalTimeScaleClock>;
+  //time_point的模板参数是UniversalTimeScaleClock,为何其可以做模板参数:符合clock的类型定义和static成员
   static constexpr bool is_steady = true;
 };
 
@@ -52,17 +56,17 @@ using Duration = UniversalTimeScaleClock::duration;//微秒,us
 using Time = UniversalTimeScaleClock::time_point;  //时间点
 
 // Convenience functions to create common::Durations.
-Duration FromSeconds(double seconds);              //将秒转为c++的duration实例对象
-Duration FromMilliseconds(int64 milliseconds);     //毫秒?
+Duration FromSeconds(double seconds);              //将秒数seconds转为c++的duration实例对象
+Duration FromMilliseconds(int64 milliseconds);     //毫秒
 
 // Returns the given duration in seconds.
 double ToSeconds(Duration duration);               //将的duration实例对象转为 秒数 
 
-// Creates a time from a Universal Time Scale.     //将TUC时间转化为c++的time_point对象
+// Creates a time from a Universal Time Scale.     //将TUC时间(微秒)转化为c++的time_point对象
 Time FromUniversal(int64 ticks);
 
 // Outputs the Universal Time Scale timestamp for a given Time.
-int64 ToUniversal(Time time);                      //将c++的time_point对象转为TUC时间,单位是?
+int64 ToUniversal(Time time);                      //将c++的time_point对象转为TUC时间,单位是us
 
 // For logging and unit tests, outputs the timestamp integer.
 std::ostream& operator<<(std::ostream& os, Time time); //重载<<操作符,将time_point以string输出

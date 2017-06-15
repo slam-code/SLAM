@@ -23,7 +23,9 @@ namespace common {
 根据lua文件设置
 */
 proto::CeresSolverOptions CreateCeresSolverOptionsProto(
-    common::LuaParameterDictionary* parameter_dictionary) {
+    common::LuaParameterDictionary* parameter_dictionary) 
+
+{
   proto::CeresSolverOptions proto;
   proto.set_use_nonmonotonic_steps(
       parameter_dictionary->GetBool("use_nonmonotonic_steps"));//是否设置使用nonmonotonic
@@ -38,11 +40,13 @@ proto::CeresSolverOptions CreateCeresSolverOptionsProto(
 根据proto文件设置
 */
 ceres::Solver::Options CreateCeresSolverOptions(
-    const proto::CeresSolverOptions& proto) {
-  ceres::Solver::Options options;
-  options.use_nonmonotonic_steps = proto.use_nonmonotonic_steps();
-  options.max_num_iterations = proto.max_num_iterations();
-  options.num_threads = proto.num_threads();
+    const proto::CeresSolverOptions& proto) 
+
+{
+  ceres::Solver::Options options;//建立临时对象
+  options.use_nonmonotonic_steps = proto.use_nonmonotonic_steps();//为临时对象赋值
+  options.max_num_iterations = proto.max_num_iterations();        //赋值
+  options.num_threads = proto.num_threads();                      //赋值
   return options;
 }
 

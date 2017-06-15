@@ -25,13 +25,13 @@ namespace cartographer {
 namespace common {
 
 /*
-配置加载类,十分简单
-CreateCeresSolverOptionsProto(...)根据lua或者proto规则设置 CeresSolver的选项
+配置加载类, 根据lua设置 CeresSolver的选项
 
 */
 proto::CeresSolverOptions CreateCeresSolverOptionsProto(
     common::LuaParameterDictionary* parameter_dictionary);
 
+//根据proto设置 CeresSolver的选项
 ceres::Solver::Options CreateCeresSolverOptions(
     const proto::CeresSolverOptions& proto);
 
