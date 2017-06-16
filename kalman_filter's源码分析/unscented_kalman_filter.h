@@ -39,7 +39,7 @@ constexpr FloatType sqr(FloatType a) {//平方,常量表达式
 }
 
 template <typename FloatType, int N>
-Eigen::Matrix<FloatType, N, N> OuterProduct( //外积,N*N
+Eigen::Matrix<FloatType, N, N> OuterProduct( // N*1 || 1*N -> 外积,N*N
     const Eigen::Matrix<FloatType, N, 1>& v) {
   return v * v.transpose();
 }
@@ -49,6 +49,10 @@ template <typename FloatType, int N>
 void CheckSymmetric(const Eigen::Matrix<FloatType, N, N>& A) {
   // This should be pretty much Eigen::Matrix<>::Zero() if the matrix is
   // symmetric.
+
+  //The NaN values are used to identify undefined or non-representable values for floating-point elements, 
+  //such as the square root of negative numbers or the result of 0/0.
+
   const FloatType norm = (A - A.transpose()).norm();
   CHECK(!std::isnan(norm) && std::abs(norm) < 1e-5)
       << "Symmetry check failed with norm: '" << norm << "' from matrix:\n"
@@ -117,8 +121,8 @@ Eigen::Matrix<FloatType, N, N> MatrixSqrt(
 template <typename FloatType, int N>
 class UnscentedKalmanFilter {
  public:
-  using StateType = Eigen::Matrix<FloatType, N, 1>;//状态矩阵N*1
-  using StateCovarianceType = Eigen::Matrix<FloatType, N, N>;//协方差矩阵N*N
+  using StateType = Eigen::Matrix<FloatType, N, 1>;           //状态矩阵N*1
+  using StateCovarianceType = Eigen::Matrix<FloatType, N, N>; //协方差矩阵N*N
 
 /*
 构造函数,
@@ -127,11 +131,13 @@ class UnscentedKalmanFilter {
 参数3,stl函数对象 compute_delta(默认),
 */
   explicit UnscentedKalmanFilter(
-      const GaussianDistribution<FloatType, N>& initial_belief,
-      std::function<StateType(const StateType& state, const StateType& delta)>
+      const GaussianDistribution<FloatType, N>& initial_belief,                 //参数1
+
+      std::function<StateType(const StateType& state, const StateType& delta)>  //参数2
           add_delta = [](const StateType& state,
                          const StateType& delta) { return state + delta; },
-      std::function<StateType(const StateType& origin, const StateType& target)>
+
+      std::function<StateType(const StateType& origin, const StateType& target)> //参数3
           compute_delta =
               [](const StateType& origin, const StateType& target) {
                 return target - origin;

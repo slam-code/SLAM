@@ -22,7 +22,7 @@ import "cartographer/transform/proto/transform.proto";
 
 // Collection of 3D 'points'.
 message PointCloud {          //点云,zyx
-  // Points as repeated floats for efficiency. All fields have the same size.
+  // Points as repeated floats for efficiency. All fields have the same size. float占4位,double占8位
   repeated float x = 3 [packed = true];
   repeated float y = 4 [packed = true];
   repeated float z = 5 [packed = true];

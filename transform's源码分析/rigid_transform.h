@@ -36,7 +36,7 @@ transformation:变换
 translation:平移
 rotation:旋转
 scaling:缩放
- counter clock wise rotation:逆时针旋转
+counter clock wise rotation:逆时针旋转
  
 Rotation是指物体自身的旋转, 也就是我我们常说的旋转, 直观的理解就是我们的视野方向没有发生改变。
 Orientation则是物体本身没有动, 我们的视野方向发生了旋转。
@@ -66,23 +66,25 @@ class Rigid2 {
   Rigid2()                                      //默认2行1列,使用单位矩阵初始化,即变换前后是一样的.
       : translation_(Vector::Identity()), rotation_(Rotation2D::Identity()) {}
 
-//根据给定的矩阵参数转换: 给定矩阵和变换角度  
+ 
 //Rotation2D(double ): Construct a 2D counter clock wise rotation from the angle a in radian. 
+
+//根据给定的矩阵参数转换: 给定 平移矩阵 和 旋转矩阵 
   Rigid2(const Vector& translation, const Rotation2D& rotation)
       : translation_(translation), rotation_(rotation) {}
 
-  Rigid2(const Vector& translation, const double rotation)//给定角度变换
+  Rigid2(const Vector& translation, const double rotation)//给定旋转角度θ 
       : translation_(translation), rotation_(rotation) {}
 
-  static Rigid2 Rotation(const double rotation) { //给定角度
+  static Rigid2 Rotation(const double rotation) { //给定旋转角度θ 
     return Rigid2(Vector::Zero(), rotation);
   }
 
-  static Rigid2 Rotation(const Rotation2D& rotation) {//给定角度
+  static Rigid2 Rotation(const Rotation2D& rotation) {//给定旋转矩阵,角度θ 
     return Rigid2(Vector::Zero(), rotation);
   }
 
-  static Rigid2 Translation(const Vector& vector) { //旋转角度是单位矩阵
+  static Rigid2 Translation(const Vector& vector) { //旋转矩阵是单位矩阵,即θ为0 
     return Rigid2(vector, Rotation2D::Identity());
   }
 
@@ -90,24 +92,32 @@ class Rigid2 {
     return Rigid2<FloatType>(Vector::Zero(), Rotation2D::Identity());
   }
 
+//https://stackoverflow.com/questions/29754251/issue-casting-c-eigenmatrix-types-via-templates
+//https://stackoverflow.com/questions/12676190/how-to-call-a-template-member-function
+//https://stackoverflow.com/questions/4942703/why-do-i-get-an-error-trying-to-call-a-template-member-function-with-an-explicit?answertab=votes
   template <typename OtherType>
   Rigid2<OtherType> cast() const {
     return Rigid2<OtherType>(translation_.template cast<OtherType>(),
                              rotation_.template cast<OtherType>());
   }
 
-  const Vector& translation() const { return translation_; }//变换后的矩阵
+  const Vector& translation() const { return translation_; }//平移矩阵
 
-  Rotation2D rotation() const { return rotation_; }//变换矩阵的方向角
+  Rotation2D rotation() const { return rotation_; }//旋转矩阵
 
   double normalized_angle() const {
-    return common::NormalizeAngleDifference(rotation().angle());//方位角,弧度[-pi;pi]
+    return common::NormalizeAngleDifference(rotation().angle());//方位角θ ,弧度[-pi;pi]
   }
 
+/*
+平移变换矩阵的逆矩阵与原来的平移量相同，但是方向相反。
+旋转变换矩阵的逆矩阵与原来的旋转轴相同,但是角度相反。
+
+*/
   Rigid2 inverse() const {//求逆,公式
-    const Rotation2D rotation = rotation_.inverse();
-    const Vector translation = -(rotation * translation_);
-    return Rigid2(translation, rotation);
+    const Rotation2D rotation = rotation_.inverse(); //取负
+    const Vector translation = -(rotation * translation_);//得到[x,y]
+    return Rigid2(translation, rotation); //返回一个新2维网格
   }
 
   string DebugString() const {
@@ -123,8 +133,15 @@ class Rigid2 {
   }
 
  private:
-  Vector translation_;//2行1列 的矩阵.p142
-  Rotation2D rotation_;//Eigen::Rotation2D,方向角
+  Vector translation_;//2行1列 的矩阵.p142 平移变换 [x',y']
+  Rotation2D rotation_;//Eigen::Rotation2D,方向角,旋转变换 [θ]
+
+  /*
+Rotation2D 是二维旋转里根据逆时针旋转θ角而生成的旋转矩阵:
+                [cosθ , -sinθ     
+Rotation2D=      sinθ ,  cosθ ]
+
+  */
 };
 
 //定义 * 乘法操作符:得到A*B矩阵
@@ -136,6 +153,7 @@ Rigid2<FloatType> operator*(const Rigid2<FloatType>& lhs,
       lhs.rotation() * rhs.rotation());
 }
 
+// C=A*B B是point,A是旋转矩阵,C是结果
 template <typename FloatType>
 typename Rigid2<FloatType>::Vector operator*(
     const Rigid2<FloatType>& rigid,

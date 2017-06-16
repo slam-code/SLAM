@@ -27,7 +27,7 @@ namespace sensor {
 
 /*
 RangeData:
-原始位置,返回点云光线,缺失点云光线
+数据成员包括 原始位置,返回点云光线,缺失点云光线
 */
 // Rays begin at 'origin'. 'returns' are the points where obstructions were
 // detected. 'misses' are points in the direction of rays for which no return

@@ -28,8 +28,8 @@ namespace {
 
 TEST(TransformTest, GetAngle) {
   std::mt19937 rng(42);//随机数种子
-  std::uniform_real_distribution<float> angle_distribution(0.f, M_PI);
-  std::uniform_real_distribution<float> position_distribution(-1.f, 1.f);
+  std::uniform_real_distribution<float> angle_distribution(0.f, M_PI);   //[0- pi],概率均匀分布
+  std::uniform_real_distribution<float> position_distribution(-1.f, 1.f);//[-1 ,1]
 
   for (int i = 0; i != 100; ++i) {
     const float angle = angle_distribution(rng);

@@ -62,7 +62,7 @@ proto::PoseTrackerOptions CreatePoseTrackerOptions(
 class PoseTracker {
  public:
   enum {
-    kMapPositionX = 0,//位置信息
+    kMapPositionX = 0,//位置信息{X,Y,Z}
     kMapPositionY,
     kMapPositionZ,
     kMapOrientationX,//方向信息,3
@@ -71,7 +71,7 @@ class PoseTracker {
     kMapVelocityX,   //速度信息,6
     kMapVelocityY,
     kMapVelocityZ,
-    kDimension  //9, We terminate loops with this.
+    kDimension  //9, We terminate loops with this. 只追踪9个维度
   };
 
   using KalmanFilter = UnscentedKalmanFilter<double, kDimension>;//9维的卡尔曼滤波

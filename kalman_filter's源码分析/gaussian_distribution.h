@@ -40,8 +40,8 @@ class GaussianDistribution {
   const Eigen::Matrix<T, N, N>& GetCovariance() const { return covariance_; }
 
  private:
-  Eigen::Matrix<T, N, 1> mean_;
-  Eigen::Matrix<T, N, N> covariance_;
+  Eigen::Matrix<T, N, 1> mean_;       //N*1
+  Eigen::Matrix<T, N, N> covariance_; //N*N
 };
 
 /*
@@ -57,13 +57,15 @@ GaussianDistribution<T, N> operator+(const GaussianDistribution<T, N>& lhs,
 }
 
 /*
-乘法,*运算符,
+乘法,*运算符,矩阵*高斯分布:N*M || M*1
 */
 template <typename T, int N, int M>
 GaussianDistribution<T, N> operator*(const Eigen::Matrix<T, N, M>& lhs,
                                      const GaussianDistribution<T, M>& rhs) {
   return GaussianDistribution<T, N>(
-      lhs * rhs.GetMean(), lhs * rhs.GetCovariance() * lhs.transpose());
+      lhs * rhs.GetMean(),                          // N*M || M*1 -> N*1
+
+      lhs * rhs.GetCovariance() * lhs.transpose()); // N*M ||M*M || M*N ->  N*N
 }
 
 }  // namespace kalman_filter

@@ -29,7 +29,7 @@ namespace cartographer {
 namespace transform {
 
 /*
-返回一个非负的弧度值,
+返回一个非负的弧度值,  double atan2(double y,double x) :计算复数 x+yi 的辐角
 */
 // Returns the non-negative rotation angle in radians of the 3D transformation
 // 'transform'.

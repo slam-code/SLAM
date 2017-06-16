@@ -42,7 +42,7 @@ constexpr float kPrecision = 0.001f;
 // Matcher for 3-d vectors w.r.t. to the target precision.
 MATCHER_P(ApproximatelyEquals, expected,
           string("is equal to ") + PrintToString(expected)) {
-  return (arg - expected).isZero(kPrecision);
+  return (arg - expected).isZero(kPrecision);//压缩后有精度丢失,精确度为0.001
 }
 
 // Helper function to test the mapping of a single point. Includes test for
@@ -78,7 +78,7 @@ TEST(CompressPointCloudTest, Compresses) {
   const PointCloud decompressed = compressed.Decompress();
   EXPECT_EQ(3, decompressed.size());
   EXPECT_THAT(decompressed,
-              Contains(ApproximatelyEquals(Eigen::Vector3f(0.838f, 0, 0))));
+              Contains(ApproximatelyEquals(Eigen::Vector3f(0.838f, 0, 0))));//压缩解压缩后,前3位小数不变
   EXPECT_THAT(decompressed,
               Contains(ApproximatelyEquals(Eigen::Vector3f(0.839f, 0, 0))));
   EXPECT_THAT(decompressed,
@@ -100,9 +100,9 @@ TEST(CompressPointCloudTest, CompressesNoGaps) {
   for (int i = 0; i < 3000; ++i) {
     point_cloud.push_back(Eigen::Vector3f(kPrecision * i - 1.5f, 0, 0));
   }
-  const CompressedPointCloud compressed(point_cloud);
-  const PointCloud decompressed = compressed.Decompress();
-  const CompressedPointCloud recompressed(decompressed);
+  const CompressedPointCloud compressed(point_cloud);//压缩
+  const PointCloud decompressed = compressed.Decompress();//解压缩
+  const CompressedPointCloud recompressed(decompressed);//再压缩
   EXPECT_EQ(decompressed.size(), recompressed.size());
 
   std::vector<float> x_coord;
@@ -112,7 +112,7 @@ TEST(CompressPointCloudTest, CompressesNoGaps) {
   std::sort(x_coord.begin(), x_coord.end());
   for (size_t i = 1; i < x_coord.size(); ++i) {
     EXPECT_THAT(std::abs(x_coord[i] - x_coord[i - 1]),
-                FloatNear(kPrecision, 1e-7f));
+                FloatNear(kPrecision, 1e-7f)); //前后相差不大
   }
 }
 

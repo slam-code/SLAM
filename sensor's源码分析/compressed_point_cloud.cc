@@ -100,7 +100,7 @@ void CompressedPointCloud::ConstIterator::ReadNextPoint() {
 最重要的构造函数
 压缩点云
 */
-CompressedPointCloud::CompressedPointCloud(const PointCloud& point_cloud)//point_cloud是一个3f的vector
+CompressedPointCloud::CompressedPointCloud(const PointCloud& point_cloud)//point_cloud是一个3f的vector,压缩到point_data_中储存
     : num_points_(point_cloud.size()) {
   // Distribute points into blocks.
   struct RasterPoint {

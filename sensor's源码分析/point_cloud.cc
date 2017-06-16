@@ -31,7 +31,7 @@ PointCloud TransformPointCloud(const PointCloud& point_cloud,
   PointCloud result;                                //3*1f的vector
   result.reserve(point_cloud.size());               //分配内存
   for (const Eigen::Vector3f& point : point_cloud) { 
-    result.emplace_back(transform * point);         //C=A*B //3*3
+    result.emplace_back(transform * point);         //C=A*B //A是Rigid3f,B是3*1
   }
   return result;
 }
