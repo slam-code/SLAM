@@ -38,7 +38,7 @@ namespace sensor {
 typedef std::vector<Eigen::Vector3f> PointCloud;//3*1的Vector3f的vector
 
 struct PointCloudWithIntensities { //点云+光线强度,{x,y,z}+intensity
-  PointCloud points;
+  PointCloud points; //3*1的vector
   std::vector<float> intensities; 
 };
 
