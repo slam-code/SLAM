@@ -42,7 +42,7 @@ struct OdometryState {
 };
 
 /*
-OdometryStateTracker:里程计跟踪类
+OdometryStateTracker:里程计跟踪类,maxsize :window_size
 含义2个数据成员
 1,里程计状态
 2,滑动窗大小

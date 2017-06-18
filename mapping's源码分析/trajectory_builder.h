@@ -48,7 +48,7 @@ class TrajectoryBuilder {
  public:
   // Represents a newly computed pose. 'pose' is the end-user visualization of
   // orientation and 'point_cloud' is the point cloud, in the local map frame.
-  struct PoseEstimate {
+  struct PoseEstimate { //PoseEstimate代表一个已经计算好的位姿,pose表示从start点看去的视觉定位,point_cloud表示局部帧的点云
     PoseEstimate() = default;
     PoseEstimate(common::Time time, const transform::Rigid3d& pose,
                  const sensor::PointCloud& point_cloud)

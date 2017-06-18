@@ -31,7 +31,7 @@ namespace cartographer {
 namespace mapping {
 
 /*
-虚基类,提供一个接口用于2d和3dslam,不可拷贝/赋值
+虚基类,提供一个接口用于2d和3d的slam,不可拷贝/赋值
 
 */
 // This interface is used for both 2D and 3D SLAM. Implementations wire up a
@@ -40,7 +40,7 @@ namespace mapping {
 // optimized pose estimates.
 class GlobalTrajectoryBuilderInterface {
  public:
-  using PoseEstimate = TrajectoryBuilder::PoseEstimate;
+  using PoseEstimate = TrajectoryBuilder::PoseEstimate;//位姿估计
 
   GlobalTrajectoryBuilderInterface() {}
   virtual ~GlobalTrajectoryBuilderInterface() {}
