@@ -33,17 +33,39 @@
 #include "sensor_msgs/PointCloud2.h"
 
 namespace cartographer_ros {
-
+/*
+PointCloud2格式：
+std_msgs/Header header
+uint32 height
+uint32 width
+sensor_msgs/PointField[] fields
+bool is_bigendian
+uint32 point_step
+uint32 row_step
+uint8[] data
+bool is_dense
+*/
 sensor_msgs::PointCloud2 ToPointCloud2Message(
     int64 timestamp, const string& frame_id,
     const ::cartographer::sensor::PointCloud& point_cloud);
 
+/*
+Vector3 translation
+Quaternion rotation
+*/
 geometry_msgs::Transform ToGeometryMsgTransform(
     const ::cartographer::transform::Rigid3d& rigid3d);
 
+/*
+Point position
+Quaternion orientation
+
+*/
 geometry_msgs::Pose ToGeometryMsgPose(
     const ::cartographer::transform::Rigid3d& rigid3d);
 
+
+//以下均变换到cartographer
 ::cartographer::sensor::PointCloudWithIntensities ToPointCloudWithIntensities(
     const sensor_msgs::LaserScan& msg);
 

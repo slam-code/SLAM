@@ -147,7 +147,7 @@ http://blog.csdn.net/android_ruben/article/details/55518769
 
 
 //函数模板是sensor_msgs::LaserScan 一类的类型
-//该函数提供激光扫描数据到 PointCloudWithIntensities 格式的转换,sensor/point_cloud.h 
+//该函数提供激光扫描数据LaserScan到 PointCloudWithIntensities 格式的转换－＞sensor/point_cloud.h 
 // For sensor_msgs::LaserScan and sensor_msgs::MultiEchoLaserScan.
 template <typename LaserMessageType>
 PointCloudWithIntensities LaserScanToPointCloudWithIntensities(
@@ -166,7 +166,7 @@ PointCloudWithIntensities LaserScanToPointCloudWithIntensities(
     if (HasEcho(echoes)) {                   //有回射时,包装成点云 ,float时,为true
 
       const float first_echo = GetFirstEcho(echoes);//float时即原值
-      if (msg.range_min <= first_echo && first_echo <= msg.range_max) {   //检查合法性
+      if (msg.range_min <= first_echo && first_echo <= msg.range_max) {   //检查合法性，距离d必须在ｍｉｎ－ｍａｘ之间
         const Eigen::AngleAxisf rotation(angle, Eigen::Vector3f::UnitZ());//初始角度位置
 
         point_cloud.points.push_back(rotation *

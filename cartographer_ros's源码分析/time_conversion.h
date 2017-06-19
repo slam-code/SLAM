@@ -22,6 +22,10 @@
 
 namespace cartographer_ros {
 
+/*返回值类型：http://wiki.ros.org/roscpp/Overview/Time
+int32 sec
+int32 nsec
+*/
 ::ros::Time ToRos(::cartographer::common::Time time);         //将Time转换成ros的时间
 
 ::cartographer::common::Time FromRos(const ::ros::Time& time);//将ros的时间转换成 Time

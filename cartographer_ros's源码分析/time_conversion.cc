@@ -20,7 +20,10 @@
 #include "ros/ros.h"
 
 namespace cartographer_ros {
-
+/*返回值类型：http://wiki.ros.org/roscpp/Overview/Time
+int32 sec
+int32 nsec
+*/
 ::ros::Time ToRos(::cartographer::common::Time time) {
   int64 uts_timestamp = ::cartographer::common::ToUniversal(time);  //转换成微秒us
   int64 ns_since_unix_epoch =                                       // 纳秒
