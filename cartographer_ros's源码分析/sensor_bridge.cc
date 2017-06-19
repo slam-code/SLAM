@@ -41,7 +41,7 @@ const string& CheckNoLeadingSlash(const string& frame_id) {
 SensorBridge::SensorBridge(
     const string& tracking_frame, const double lookup_transform_timeout_sec,
     tf2_ros::Buffer* const tf_buffer,
-    carto::mapping::TrajectoryBuilder* const trajectory_builder)
+    carto::mapping::TrajectoryBuilder* const trajectory_builder)//TrajectoryBuilder是一个虚基类
 
     : tf_bridge_(tracking_frame, lookup_transform_timeout_sec, tf_buffer),
       trajectory_builder_(trajectory_builder) {}
@@ -52,13 +52,36 @@ void SensorBridge::HandleOdometryMessage(
     const string& sensor_id, const nav_msgs::Odometry::ConstPtr& msg) 
 {
   const carto::common::Time time = FromRos(msg->header.stamp);
-  //返回的是geometry_msgs::TransformStamped ,http://docs.ros.org/api/geometry_msgs/html/msg/TransformStamped.html
+/*
+typedef boost::shared_ptr< ::nav_msgs::Odometry_<ContainerAllocator>  const> ConstPtr;
+Odometry:
+std_msgs/Header header
+string child_frame_id
+geometry_msgs/PoseWithCovariance pose
+geometry_msgs/TwistWithCovariance twist
+
+LookupToTracking()返回unique_ptr<::cartographer::transform::Rigid3d>类型
+http://docs.ros.org/api/geometry_msgs/html/msg/TransformStamped.html
+
+AddOdometerData(const string& sensor_id, common::Time time,
+                       const transform::Rigid3d& odometer_pose) 
+
+AddOdometerData()添加的是里程计原始位置的位姿A.而不是machine的center位姿C
+
+msg->pose.pose是C,C=AB <-> A=C*B^(-1)                       
+*/
   const auto sensor_to_tracking = tf_bridge_.LookupToTracking( 
-      time, CheckNoLeadingSlash(msg->child_frame_id));
+      time, CheckNoLeadingSlash(msg->child_frame_id));//根据childid找到里程计的pose,B
   if (sensor_to_tracking != nullptr) {
     trajectory_builder_->AddOdometerData(
         sensor_id, time,
-        ToRigid3d(msg->pose.pose) * sensor_to_tracking->inverse());
+        ToRigid3d(msg->pose.pose) * sensor_to_tracking->inverse());//C*B^(-1)
+/*
+Pose:
+Point position {x,y,z}
+Quaternion orientation{x,y,z,w}
+
+*/
   }
 }
 
@@ -74,6 +97,7 @@ void SensorBridge::HandleImuMessage(const string& sensor_id,
          "by setting angular_velocity_covariance[0] to -1. Cartographer "
          "requires this data to work. See "
          "http://docs.ros.org/api/sensor_msgs/html/msg/Imu.html.";
+        //http://docs.ros.org/api/sensor_msgs/html/msg/Imu.html
 
   const carto::common::Time time = FromRos(msg->header.stamp);
   const auto sensor_to_tracking = tf_bridge_.LookupToTracking(

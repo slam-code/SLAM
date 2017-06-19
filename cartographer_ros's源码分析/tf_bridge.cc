@@ -37,12 +37,26 @@ std::unique_ptr<::cartographer::transform::Rigid3d> TfBridge::LookupToTracking(
     const ::cartographer::common::Time time, const string& frame_id) const
 
      {
-  ::ros::Duration timeout(lookup_transform_timeout_sec_);                  //等待超时时间
-  std::unique_ptr<::cartographer::transform::Rigid3d> frame_id_to_tracking;//关键帧id
+  ::ros::Duration timeout(lookup_transform_timeout_sec_);                  //至多等待超时时间
+  std::unique_ptr<::cartographer::transform::Rigid3d> frame_id_to_tracking;//没用,需要追踪的关键帧id,用make_unique代替了.
   try {
 
-    //lookup返回的是geometry_msgs::TransformStamped ,http://docs.ros.org/api/geometry_msgs/html/msg/TransformStamped.html
-    //lookupTransform:　http://docs.ros.org/jade/api/tf2_ros/html/c++/classtf2__ros_1_1Buffer.html
+/*
+lookup返回的是geometry_msgs::TransformStamped 
+http://docs.ros.org/api/geometry_msgs/html/msg/TransformStamped.html
+lookupTransform:　http://docs.ros.org/jade/api/tf2_ros/html/c++/classtf2__ros_1_1Buffer.html
+
+lookupTransform():Get the transform between two frames by frame ID.
+Parameters:
+target_frame  The frame to which data should be transformed
+source_frame  The frame where the data originated
+time  The time at which the value of the transform is desired. (0 will get the latest)
+timeout How long to block before failing
+Returns:
+The transform between the frames
+
+*/
+
     const ::ros::Time latest_tf_time =
         buffer_
             ->lookupTransform(tracking_frame_, frame_id, ::ros::Time(0.),
