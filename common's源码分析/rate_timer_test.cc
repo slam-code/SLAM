@@ -23,7 +23,7 @@ namespace common {
 namespace {
 
 TEST(RateTimerTest, ComputeRate) {
-  RateTimer<> rate_timer(common::FromSeconds(1.));//设置时间段是1s
+  RateTimer<> rate_timer(common::FromSeconds(1.));//默认模板参数是steady_clock,设置时间段是1s
   common::Time time = common::FromUniversal(42);  // 时间点,42us
   for (int i = 0; i < 100; ++i) {                 //每隔0.1s产生一次事件,产生100次
     rate_timer.Pulse(time);
@@ -32,7 +32,7 @@ TEST(RateTimerTest, ComputeRate) {
   EXPECT_NEAR(10., rate_timer.ComputeRate(), 1e-3);//频率应该等于10次每s
 }
 
-struct SimulatedClock {
+struct SimulatedClock { /*模拟的时间clock类*/
   using rep = std::chrono::steady_clock::rep;
   using period = std::chrono::steady_clock::period;
   using duration = std::chrono::steady_clock::duration;

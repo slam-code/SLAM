@@ -32,7 +32,7 @@ http://wiki.ros.org/cn/navigation/Tutorials/RobotSetup/TF
 http://wiki.ros.org/tf2
 http://docs.ros.org/jade/api/tf2_ros/html/c++/classtf2__ros_1_1Buffer.html
 
-TfBridge类
+TfBridge类,桥接模式
 
 3个数据成员
 1,tracking_frame_

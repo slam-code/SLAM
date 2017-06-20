@@ -57,7 +57,7 @@ struct TrajectoryNode {
 
   common::Time time() const { return constant_data->time; }
 
-  const ConstantData* constant_data;//常指针.指向内存的数据不变
+  const ConstantData* constant_data;//常指针.指向某块内存,该内存块的数据不变
 
   transform::Rigid3d pose;
 };
