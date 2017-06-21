@@ -1,0 +1,2 @@
+robot_setup_tf:ros_start1
+-DCATKIN_DEVEL_PREFIX=/media/shen/onlyu/githubcollect/google_SLAM_cartographer/ros_start/devel -DCMAKE_INSTALL_PREFIX=/media/shen/onlyu/githubcollect/google_SLAM_cartographer/ros_start/install -G Unix Makefiles
