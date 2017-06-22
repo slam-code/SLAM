@@ -1,8 +1,0 @@
-prefix=/media/shen/onlyu/githubcollect/google_SLAM_cartographer/ros_start/install
-
-Name: ros_start1
-Description: Description of ros_start1
-Version: 0.0.0
-Cflags: 
-Libs: -L/media/shen/onlyu/githubcollect/google_SLAM_cartographer/ros_start/install/lib 
-Requires: 

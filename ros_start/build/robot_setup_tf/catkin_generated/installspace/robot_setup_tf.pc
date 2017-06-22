@@ -1,8 +1,0 @@
-prefix=/media/shen/onlyu/githubcollect/google_SLAM_cartographer/ros_start/install
-
-Name: robot_setup_tf
-Description: Description of robot_setup_tf
-Version: 0.0.0
-Cflags: 
-Libs: -L/media/shen/onlyu/githubcollect/google_SLAM_cartographer/ros_start/install/lib 
-Requires: 
