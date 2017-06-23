@@ -10,8 +10,7 @@
     http://blog.csdn.net/yizhou2010/article/details/52749890
     http://blog.csdn.net/yizhou2010/article/details/52618968
 1、先略读教材：王宜举, 修乃华. 非线性最优化理论与方法[J]. 2012.
-
-      再依据Ceres Solver官网教程进行学习http://www.ceres-solver.org/tutorial.html
+    再依据Ceres Solver官网教程进行学习http://www.ceres-solver.org/tutorial.html
 
 3、tutorial例子解析
 
