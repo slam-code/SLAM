@@ -53,7 +53,7 @@ Translation()指定对象的2D translation（2D平移）。
 第一个参数对应X轴，第二个参数对应Y轴。默认是单位变换。　　　
 Identity():单位矩阵
 
-[x'       [cosθ , -sinθ           [ x,
+[x'       [cosθ , -sinθ           [ x
  y']   =   sinθ ,  cosθ ]   *       y ]
 
 */
@@ -63,7 +63,7 @@ class Rigid2 {
   using Vector = Eigen::Matrix<FloatType, 2, 1>;//2行1列,p142
   using Rotation2D = Eigen::Rotation2D<FloatType>;
 
-  Rigid2()                                      //默认2行1列,使用单位矩阵初始化,即变换前后是一样的.
+  Rigid2()                                      //默认2行1列,使用单位矩阵初始化,即变换前后是一样的,debugstring:[1,0,0]
       : translation_(Vector::Identity()), rotation_(Rotation2D::Identity()) {}
 
  
@@ -84,11 +84,11 @@ class Rigid2 {
     return Rigid2(Vector::Zero(), rotation);
   }
 
-  static Rigid2 Translation(const Vector& vector) { //旋转矩阵是单位矩阵,即θ为0 
+  static Rigid2 Translation(const Vector& vector) { //旋转矩阵是单位矩阵,即θ为0 ,[x,y,0]
     return Rigid2(vector, Rotation2D::Identity());
   }
 
-  static Rigid2<FloatType> Identity() {             //返回单位矩阵
+  static Rigid2<FloatType> Identity() {             //返回矩阵,[0,0,0]
     return Rigid2<FloatType>(Vector::Zero(), Rotation2D::Identity());
   }
 
@@ -101,9 +101,9 @@ class Rigid2 {
                              rotation_.template cast<OtherType>());
   }
 
-  const Vector& translation() const { return translation_; }//平移矩阵
+  const Vector& translation() const { return translation_; }//平移矩阵,[x,y]
 
-  Rotation2D rotation() const { return rotation_; }//旋转矩阵
+  Rotation2D rotation() const { return rotation_; }//旋转矩阵 []
 
   double normalized_angle() const {
     return common::NormalizeAngleDifference(rotation().angle());//方位角θ ,弧度[-pi;pi]
@@ -133,7 +133,7 @@ class Rigid2 {
   }
 
  private:
-  Vector translation_;//2行1列 的矩阵.p142 平移变换 [x',y']
+  Vector translation_;//2行1列 的矩阵.p142 平移变换 [x',y'].注意,此处是增量变换,即deltax=x,deltay=y
   Rotation2D rotation_;//Eigen::Rotation2D,方向角,旋转变换 [θ]
 
   /*
@@ -144,7 +144,7 @@ Rotation2D=      sinθ ,  cosθ ]
   */
 };
 
-//定义 * 乘法操作符:得到A*B矩阵
+//定义 * 乘法操作符:2个平移旋转相乘,得到第三个平移旋转矩阵,A*B.矩阵.先对B旋转,再加上delta
 template <typename FloatType>
 Rigid2<FloatType> operator*(const Rigid2<FloatType>& lhs,
                             const Rigid2<FloatType>& rhs) {
@@ -153,7 +153,8 @@ Rigid2<FloatType> operator*(const Rigid2<FloatType>& lhs,
       lhs.rotation() * rhs.rotation());
 }
 
-// C=A*B B是point,A是旋转矩阵,C是结果
+// 旋转矩阵乘以point,得到point,
+//C=A*B B是point,A是旋转矩阵,C是point结果: 先对point旋转,再加上平移的deltax,deltay
 template <typename FloatType>
 typename Rigid2<FloatType>::Vector operator*(
     const Rigid2<FloatType>& rigid,
