@@ -39,17 +39,17 @@ struct _Unique_if {
 
 template <class T>
 struct _Unique_if<T[]> {
-  typedef std::unique_ptr<T[]> _Unknown_bound;
+  typedef std::unique_ptr<T[]> _Unknown_bound; //不支持数组(不定长)
 };
 
 template <class T, size_t N>
-struct _Unique_if<T[N]> {
+struct _Unique_if<T[N]> {                      //不支持数组(定长)
   typedef void _Known_bound;
 };
 
 template <class T, class... Args>
 typename _Unique_if<T>::_Single_object make_unique(Args&&... args) {
-  return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+  return std::unique_ptr<T>(new T(std::forward<Args>(args)...));  //完美转发参数
 }
 
 template <class T>

@@ -31,7 +31,7 @@ void Histogram::Add(const float value) { values_.push_back(value); }
 
 //以bin大小是buckets转成 string,输出 直方图信息.
 string Histogram::ToString(const int buckets) const {
-  CHECK_GE(buckets, 1);
+  CHECK_GE(buckets, 1);      //篮子个数必须>=1
   if (values_.empty()) {
     return "Count: 0";
   }
@@ -43,19 +43,19 @@ string Histogram::ToString(const int buckets) const {
                   "  Min: " + std::to_string(min) +
                   "  Max: " + std::to_string(max) +
                   "  Mean: " + std::to_string(mean);
-  if (min == max) {
+  if (min == max) { //最大等于最小直接返回.
     return result;
   }
   CHECK_LT(min, max);
-  float lower_bound = min;
+  float lower_bound = min; //bin区间下界
   int total_count = 0;
-  for (int i = 0; i != buckets; ++i) {
-    const float upper_bound =
+  for (int i = 0; i != buckets; ++i) { //根据bin个数
+    const float upper_bound =  //bin区间上界
         (i + 1 == buckets)
             ? max
             : (max * (i + 1) / buckets + min * (buckets - i - 1) / buckets);
     int count = 0;
-    for (const float value : values_) {
+    for (const float value : values_) { //对每一个vector<float>的值
       if (lower_bound <= value &&
           (i + 1 == buckets ? value <= upper_bound : value < upper_bound)) {
         ++count;
