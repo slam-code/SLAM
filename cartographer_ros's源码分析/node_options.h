@@ -34,7 +34,7 @@ struct NodeOptions {
   double pose_publish_period_sec;     //5e-3
 };
 
-NodeOptions CreateNodeOptions(        //backpack_2d.lua
+NodeOptions CreateNodeOptions(        //backpack_2d.lua,revo_lds.lua
     ::cartographer::common::LuaParameterDictionary* lua_parameter_dictionary);
 
 }  // namespace cartographer_ros

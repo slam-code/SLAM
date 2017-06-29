@@ -51,7 +51,7 @@ class PoseTrackerTest : public ::testing::Test {
     const proto::PoseTrackerOptions options =
         CreatePoseTrackerOptions(parameter_dictionary.get());
     pose_tracker_ =
-        common::make_unique<PoseTracker>(options, common::FromUniversal(1000));
+        common::make_unique<PoseTracker>(options, common::FromUniversal(1000)); //创建卡尔曼滤波跟踪器
   }
 
   std::unique_ptr<PoseTracker> pose_tracker_;

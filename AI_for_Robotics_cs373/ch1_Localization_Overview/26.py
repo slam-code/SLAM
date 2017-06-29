@@ -2,7 +2,7 @@
 
 '''
 
-一开始机器人位置概率均匀分布,但是经过2次测量均为red,则现在位置概率最大的index是 3. 因为此时是最好匹配, (从0计)
+一开始机器人位置概率均匀分布,但是经过2次测量均为red,则现在位置概率最大的index是 3,(测量后又移动了1次). 因为此时是最好匹配, (从0计)
 '''
 
 #Modify the previous code so that the robot senses red twice.

@@ -25,18 +25,18 @@
 
 namespace cartographer_ros {
 
-//按照backpack_2d.lua配置
+//按照backpack_2d.lua配置,revo_lds.lua
 struct TrajectoryOptions {
   ::cartographer::mapping::proto::TrajectoryBuilderOptions
       trajectory_builder_options;
-  string tracking_frame;
-  string published_frame;
-  string odom_frame;
-  bool provide_odom_frame;
-  bool use_odometry;
-  bool use_laser_scan;
-  bool use_multi_echo_laser_scan;
-  int num_point_clouds;
+  string tracking_frame;  //horizontal_laser_link
+  string published_frame; //horizontal_laser_link
+  string odom_frame;      //odom
+  bool provide_odom_frame;//true
+  bool use_odometry;      //false
+  bool use_laser_scan;    //true
+  bool use_multi_echo_laser_scan;//false
+  int num_point_clouds;   //0
 };
 
 TrajectoryOptions CreateTrajectoryOptions(
