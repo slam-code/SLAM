@@ -1,18 +1,3 @@
-/*
- * Copyright 2016 The Cartographer Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 #ifndef CARTOGRAPHER_COMMON_BLOCKING_QUEUE_H_
 #define CARTOGRAPHER_COMMON_BLOCKING_QUEUE_H_
@@ -28,12 +13,12 @@
 /*
  * BlockingQueue是线程安全的阻塞队列,(生产者消费者模式)
  * 不可拷贝不可赋值
- * 构造函数初始化队列大小,kInfiniteQueueSize不限制容量或queue_size限制容量?->通过条件变量做到.
+ * 构造函数初始化队列大小,kInfiniteQueueSize=0默认不限制容量。queue_size限制容量：通过条件变量做到.
  * Push()添加元素,容量不够时,阻塞等待
  * Pop()删除元素,没有元素时,阻塞等待
  * Peek()返回下一个应该弹出的元素
- * PushWithTimeout(),添加元素,超时则返回false
- * PopWithTimeout(),同上
+ * PushWithTimeout(),添加元素,若超时则返回false
+ * PopWithTimeout(),删除元素，若超时则返回false
  *
  * */
 namespace cartographer {
@@ -47,23 +32,23 @@ class BlockingQueue {
   static constexpr size_t kInfiniteQueueSize = 0;
 
   // Constructs a blocking queue with infinite queue size.
-  BlockingQueue() : BlockingQueue(kInfiniteQueueSize) {}
+  BlockingQueue() : BlockingQueue(kInfiniteQueueSize) {} //默认不限制容量
 
   BlockingQueue(const BlockingQueue&) = delete;
   BlockingQueue& operator=(const BlockingQueue&) = delete;
 
-  // Constructs a blocking queue with a size of 'queue_size'.
+  // Constructs a blocking queue with a size of 'queue_size'.限制容量
   explicit BlockingQueue(const size_t queue_size) : queue_size_(queue_size) {}
 
   // Pushes a value onto the queue. Blocks if the queue is full.
   void Push(T t) {
-    MutexLocker lock(&mutex_);
-    lock.Await([this]() REQUIRES(mutex_) { return QueueNotFullCondition(); });
-    deque_.push_back(std::move(t));
+    MutexLocker lock(&mutex_);//加锁
+    lock.Await([this]() REQUIRES(mutex_) { return QueueNotFullCondition(); });//队列未满才能push
+    deque_.push_back(std::move(t)); //移动而非拷贝
   }
 
   // Like push, but returns false if 'timeout' is reached.
-  bool PushWithTimeout(T t, const common::Duration timeout) {
+  bool PushWithTimeout(T t, const common::Duration timeout) { //最多等待timeout时间
     MutexLocker lock(&mutex_);
     if (!lock.AwaitWithTimeout(
             [this]() REQUIRES(mutex_) { return QueueNotFullCondition(); },
@@ -76,8 +61,8 @@ class BlockingQueue {
 
   // Pops the next value from the queue. Blocks until a value is available.
   T Pop() {
-    MutexLocker lock(&mutex_);
-    lock.Await([this]() REQUIRES(mutex_) { return QueueNotEmptyCondition(); });
+    MutexLocker lock(&mutex_); //加锁
+    lock.Await([this]() REQUIRES(mutex_) { return QueueNotEmptyCondition(); });//队列不为空才能pop()
 
     T t = std::move(deque_.front());
     deque_.pop_front();

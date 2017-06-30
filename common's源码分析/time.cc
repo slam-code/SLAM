@@ -1,18 +1,4 @@
-/*
- * Copyright 2016 The Cartographer Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 
 #include "cartographer/common/time.h"
 
@@ -24,11 +10,13 @@ namespace common {
 //duration_cast是c++ 11的时间显式转换函数.
 Duration FromSeconds(const double seconds) {
   return std::chrono::duration_cast<Duration>(
-      std::chrono::duration<double>(seconds));  //将double类型的秒数转化为duration对象
+    //将double类型的秒数转化为duration对象
+      std::chrono::duration<double>(seconds));  
 }
 
 double ToSeconds(const Duration duration) {
-  return std::chrono::duration_cast<std::chrono::duration<double>>(duration) //反转化,count()返回时钟周期数,ticks
+//反转化,count()返回时钟周期数,ticks
+  return std::chrono::duration_cast<std::chrono::duration<double>>(duration)
       .count();
 }
 

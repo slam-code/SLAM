@@ -4,7 +4,8 @@
 ``` c++
  
 文件:common/make_unique.h
- 
+
+
 #ifndef CARTOGRAPHER_COMMON_MAKE_UNIQUE_H_
 #define CARTOGRAPHER_COMMON_MAKE_UNIQUE_H_
 
@@ -17,7 +18,7 @@ namespace cartographer {
 namespace common {
 
 /*
-目的:在不支持c++14的环境下实现 std::make_unique的功能
+make_unique.h在不支持c++14的环境下实现 std::make_unique的功能
 实现细节:完美转发和移动语义
 
 */
@@ -30,11 +31,11 @@ struct _Unique_if {
 
 template <class T>
 struct _Unique_if<T[]> {
-  typedef std::unique_ptr<T[]> _Unknown_bound;
+  typedef std::unique_ptr<T[]> _Unknown_bound; //不支持数组(不定长)
 };
 
 template <class T, size_t N>
-struct _Unique_if<T[N]> {
+struct _Unique_if<T[N]> {                      //不支持数组(定长)
   typedef void _Known_bound;
 };
 
@@ -50,14 +51,17 @@ typename _Unique_if<T>::_Unknown_bound make_unique(size_t n) {
 }
 
 template <class T, class... Args>
-typename _Unique_if<T>::_Known_bound make_unique(Args&&...) = delete;
+typename _Unique_if<T>::_Known_bound make_unique(Args&&...) = delete;//不能使用定长数组
 
 }  // namespace common
 }  // namespace cartographer
 
 #endif  // CARTOGRAPHER_COMMON_MAKE_UNIQUE_H_
 
-
+/*
+完美转发:
+完美的传递函数参数而不修改参数类型，左值依然是左值，右值依然是右值。
+*/
 
 ```
 

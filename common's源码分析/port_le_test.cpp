@@ -1,14 +1,14 @@
- #include <vector>
+#include <vector>
 #include <iostream>
-
+#include <vector> 
  /*
+ c++11 已经支持back_inserter。
   */
 	//#include<boost/iostreams/device/back_inserter.hpp>
-	#include<vector>
-	#include<iostream>
-	using std::cout;
-	using std::endl;
-	int main(int argc, char *argv[])
+
+using std::cout;
+using std::endl;
+int main(int argc, char *argv[])
 	{
 	    std::vector<int> vec;
 	    for (int i = 0 ; i < 3; ++i)

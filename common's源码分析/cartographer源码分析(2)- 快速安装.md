@@ -1,7 +1,7 @@
 
 源码可在https://github.com/learnmoreonce/SLAM 下载
 ``` python
-
+安装十分简单，参照官方指南，使用以下命令即可。
 # Install the required libraries that are available as debs.
 sudo apt-get update
 sudo apt-get install -y \
@@ -74,7 +74,7 @@ roslaunch cartographer_ros demo_backpack_2d.launch bag_filename:=${HOME}/Downloa
 
 
 
-重要文件,百度云已有:
+重要文件,百度云已有，可直接使用百度云离线下载:
 cartographer_paper_revo_lds.bag         3M 
 taurob_tracker_simulation.bag           42.4M
 2011-09-15-08-32-46.bag                 3.66G

@@ -1,18 +1,3 @@
-/*
- * Copyright 2016 The Cartographer Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 #ifndef CARTOGRAPHER_COMMON_RATE_TIMER_H_
 #define CARTOGRAPHER_COMMON_RATE_TIMER_H_
@@ -41,7 +26,7 @@
 namespace cartographer {
 namespace common {
 
-// Computes the rate at which pulses come in.
+// Computes the rate at which pulses come in.默认模板参数是steady_clock
 template <typename ClockType = std::chrono::steady_clock>
 class RateTimer {
  public:
@@ -51,16 +36,18 @@ class RateTimer {
       : window_duration_(window_duration) {}
   ~RateTimer() {}
 
-  RateTimer(const RateTimer&) = delete;
+  RateTimer(const RateTimer&) = delete; //不可拷贝/不可赋值
   RateTimer& operator=(const RateTimer&) = delete;
 
   // Returns the pulse rate in Hz.
-  double ComputeRate() const {
+  double ComputeRate() const { //计算频率
     if (events_.empty()) {
       return 0.;
     }
-    return static_cast<double>(events_.size() - 1) /                       //事件次数,-> 次数除以时间即为每秒钟发生多少次事件
-           common::ToSeconds((events_.back().time - events_.front().time));//最晚发生的时间-最早发生的时间 (事件产生时的真实时间)
+     //事件次数除以时间即为每秒钟发生多少次事件
+    return static_cast<double>(events_.size() - 1) / 
+           common::ToSeconds((events_.back().time - events_.front().time));
+     //最晚发生的时间-最早发生的时间 (事件产生时的真实时间)
   }
 
   // Returns the ratio of the pulse rate (with supplied times) to the wall time
@@ -71,13 +58,14 @@ class RateTimer {
       return 0.;
     }
     return common::ToSeconds((events_.back().time - events_.front().time)) / //真实时间
-           std::chrono::duration_cast<std::chrono::duration<double>>(        //墙上挂钟时间,->调用Pulse时的系统的时间
+            //墙上挂钟时间,->调用Pulse时的系统的时间
+           std::chrono::duration_cast<std::chrono::duration<double>>(        
                events_.back().wall_time - events_.front().wall_time)
                .count();
   }
 
   // Records an event that will contribute to the computed rate.
-  void Pulse(common::Time time) {
+  void Pulse(common::Time time) { //产生一个脉冲
     events_.push_back(Event{time, ClockType::now()});
     while (events_.size() > 2 &&
            (events_.back().wall_time - events_.front().wall_time) >

@@ -1,18 +1,4 @@
-/*
- * Copyright 2016 The Cartographer Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 
 #ifndef CARTOGRAPHER_COMMON_MAKE_UNIQUE_H_
 #define CARTOGRAPHER_COMMON_MAKE_UNIQUE_H_
@@ -26,7 +12,7 @@ namespace cartographer {
 namespace common {
 
 /*
-目的:在不支持c++14的环境下实现 std::make_unique的功能
+make_unique.h在不支持c++14的环境下实现 std::make_unique的功能
 实现细节:完美转发和移动语义
 
 */
@@ -59,9 +45,14 @@ typename _Unique_if<T>::_Unknown_bound make_unique(size_t n) {
 }
 
 template <class T, class... Args>
-typename _Unique_if<T>::_Known_bound make_unique(Args&&...) = delete;
+typename _Unique_if<T>::_Known_bound make_unique(Args&&...) = delete;//不能使用定长数组
 
 }  // namespace common
 }  // namespace cartographer
 
 #endif  // CARTOGRAPHER_COMMON_MAKE_UNIQUE_H_
+
+/*
+完美转发:
+完美的传递函数参数而不修改参数类型，左值依然是左值，右值依然是右值。
+*/

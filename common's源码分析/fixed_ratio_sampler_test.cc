@@ -1,18 +1,4 @@
-/*
- * Copyright 2016 The Cartographer Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 
 #include "cartographer/common/fixed_ratio_sampler.h"
 
@@ -23,14 +9,14 @@ namespace common {
 namespace {
 
 TEST(FixedRatioSamplerTest, AlwaysTrue) {
-  FixedRatioSampler fixed_ratio_sampler(1.);//固定采样率是1hz
+  FixedRatioSampler fixed_ratio_sampler(1.);//固定采样率是1hz，每次Pulse都采集samples
   for (int i = 0; i < 100; ++i) {
     EXPECT_TRUE(fixed_ratio_sampler.Pulse());
   }
 }
 
 TEST(FixedRatioSamplerTest, AlwaysFalse) {
-  FixedRatioSampler fixed_ratio_sampler(0.);//0 hz
+  FixedRatioSampler fixed_ratio_sampler(0.);//0 hz，不采集samples
   for (int i = 0; i < 100; ++i) {
     EXPECT_FALSE(fixed_ratio_sampler.Pulse());
   }
@@ -39,7 +25,7 @@ TEST(FixedRatioSamplerTest, AlwaysFalse) {
 TEST(FixedRatioSamplerTest, SometimesTrue) {
   FixedRatioSampler fixed_ratio_sampler(0.5); //0.5hz
   for (int i = 0; i < 100; ++i) {
-    EXPECT_EQ(i % 2 == 0, fixed_ratio_sampler.Pulse());
+    EXPECT_EQ(i % 2 == 0, fixed_ratio_sampler.Pulse());//每2次Pulse采集一次samples
   }
 }
 
@@ -48,7 +34,7 @@ TEST(FixedRatioSamplerTest, FirstPulseIsTrue) {
   FixedRatioSampler fixed_ratio_sampler(1e-20); //0.000000...001hz
   EXPECT_TRUE(fixed_ratio_sampler.Pulse());
   for (int i = 0; i < 100; ++i) {
-    EXPECT_FALSE(fixed_ratio_sampler.Pulse());
+    EXPECT_FALSE(fixed_ratio_sampler.Pulse()); //每100000000次Pulse采集一次samples
   }
 }
 

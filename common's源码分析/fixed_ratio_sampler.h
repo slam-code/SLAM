@@ -1,18 +1,3 @@
-/*
- * Copyright 2016 The Cartographer Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 #ifndef CARTOGRAPHER_COMMON_FIXED_RATIO_SAMPLER_H_
 #define CARTOGRAPHER_COMMON_FIXED_RATIO_SAMPLER_H_
@@ -25,9 +10,10 @@ namespace cartographer {
 namespace common {
 
 /*
-FixedRatioSampler是频率固定的采样器类,不可拷贝,不可赋值.
-提供2种操作:
-Pulse()产生一个事件,并且:如果计入采样返回true
+FixedRatioSampler是频率固定的采样器类，目的是从数据流中均匀的按照固定频率采样数据
+FixedRatioSampler不可拷贝,不可赋值.
+成员函数提供2种操作:
+Pulse()产生一个事件pulses,并且:如果计入采样samples，返回true
 DebugString():以string形式输出采样率
 
 */
