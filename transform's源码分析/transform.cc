@@ -1,25 +1,11 @@
-/*
- * Copyright 2016 The Cartographer Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 #include "cartographer/transform/transform.h"
 
 namespace cartographer {
 namespace transform {
 
-Rigid2d ToRigid2(const proto::Rigid2d& pose) { //proto的translation对应被旋转矩阵,rotation对应旋转角度数值
+//proto的translation对应被旋转矩阵,rotation对应旋转角度数值
+Rigid2d ToRigid2(const proto::Rigid2d& pose) { 
   return Rigid2d({pose.translation().x(), pose.translation().y()},
                  pose.rotation());
 }
@@ -42,11 +28,13 @@ Eigen::Quaterniond ToEigen(const proto::Quaterniond& quaternion) {
                             quaternion.z());
 }
 
-proto::Rigid2d ToProto(const transform::Rigid2d& transform) {//序列化,将二维数转化成proto
+proto::Rigid2d ToProto(const transform::Rigid2d& transform) {
+//序列化,将二维数转化成proto
   proto::Rigid2d proto;
   proto.mutable_translation()->set_x(transform.translation().x());
   proto.mutable_translation()->set_y(transform.translation().y());
-  proto.set_rotation(transform.rotation().angle());//angle()返回方位角,弧度[-pi;pi]
+  proto.set_rotation(transform.rotation().angle());
+  //angle()返回方位角,弧度[-pi;pi]
   return proto;
 }
 
@@ -66,7 +54,8 @@ proto::Rigid3d ToProto(const transform::Rigid3d& rigid) {
 }
 
 transform::Rigid3d ToRigid3(const proto::Rigid3d& rigid) {
-  //调用的是transform::Rigid3d()的构造函数,构造函数里又调用的ToEigen(const proto::Vector3d& vector)..
+  //调用的是transform::Rigid3d()的构造函数,
+  //构造函数里又调用的ToEigen(const proto::Vector3d& vector)..
   return transform::Rigid3d(ToEigen(rigid.translation()),
                             ToEigen(rigid.rotation()));
 }

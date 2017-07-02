@@ -1,18 +1,4 @@
-/*
- * Copyright 2016 The Cartographer Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 
 #include "cartographer/transform/rigid_transform.h"
 
@@ -27,7 +13,9 @@ namespace cartographer {
 namespace transform {
 
 namespace {
+//typedef Matrix< double , 3 , 1> Eigen::Vector3d
 
+//根据lua字典获取vector<double>,再转换成Vector3d
 Eigen::Vector3d TranslationFromDictionary(  
     common::LuaParameterDictionary* dictionary) {
   const std::vector<double> translation = dictionary->GetArrayValuesAsDoubles();
@@ -37,20 +25,29 @@ Eigen::Vector3d TranslationFromDictionary(
 
 }  // namespace
 
-//https://stackoverflow.com/questions/21412169/creating-a-rotation-matrix-with-pitch-yaw-roll-using-eigen
 /*
-typedef Matrix< double , 3 , 1> Eigen::Vector3d
+利用AngleAxisd可以根据3个坐标轴旋转.构成四元数
+https://stackoverflow.com/questions/21412169/creating-a-rotation-matrix-with-pitch-yaw-roll-using-eigen
 http://eigen.tuxfamily.org/dox/classEigen_1_1AngleAxis.html
 
+返回根据roll,pathch和yaw构成的4元数
 */
 Eigen::Quaterniond RollPitchYaw(const double roll, const double pitch,
                                 const double yaw) {
   const Eigen::AngleAxisd roll_angle(roll, Eigen::Vector3d::UnitX());//构造一个AngleAxisd对象
   const Eigen::AngleAxisd pitch_angle(pitch, Eigen::Vector3d::UnitY());//同上
   const Eigen::AngleAxisd yaw_angle(yaw, Eigen::Vector3d::UnitZ());//同上
-  return yaw_angle * pitch_angle * roll_angle; //返回4元组
+  return yaw_angle * pitch_angle * roll_angle; //返回4元数
 }
 
+
+
+/*
+从lua配置项取得
+
+translation:平移矩阵
+rotation:旋转矩阵,w,x,y,z
+*/
 transform::Rigid3d FromDictionary(common::LuaParameterDictionary* dictionary) {
   const Eigen::Vector3d translation =
       TranslationFromDictionary(dictionary->GetDictionary("translation").get());
