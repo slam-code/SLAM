@@ -32,16 +32,14 @@ XyzWriterPointsProcessor::XyzWriterPointsProcessor(
     : next_(next), file_writer_(std::move(file_writer)) {}
 
 /*
-根据filename返回指向文件名的智能指针
+根据filename返回指向文件名的file_writer_factory
 */
 std::unique_ptr<XyzWriterPointsProcessor>
 XyzWriterPointsProcessor::FromDictionary
-
 (
     FileWriterFactory file_writer_factory,
     common::LuaParameterDictionary* const dictionary,
     PointsProcessor* const next) 
-
 {
   return common::make_unique<XyzWriterPointsProcessor>(
       file_writer_factory(dictionary->GetString("filename")), next);
@@ -61,6 +59,9 @@ PointsProcessor::FlushResult XyzWriterPointsProcessor::Flush() {
   LOG(FATAL);
 }
 
+/*
+主逻辑,以{x,y,z}写入文件
+*/
 void XyzWriterPointsProcessor::Process(std::unique_ptr<PointsBatch> batch) {
   for (const Eigen::Vector3f& point : batch->points) {
     WriteXyzPoint(point, file_writer_.get());

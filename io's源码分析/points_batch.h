@@ -1,18 +1,3 @@
-/*
- * Copyright 2016 The Cartographer Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 #ifndef CARTOGRAPHER_IO_POINTS_BATCH_H_
 #define CARTOGRAPHER_IO_POINTS_BATCH_H_
@@ -31,9 +16,16 @@ namespace io {
 using Color = std::array<uint8_t, 3>;
 
 /*
-PointsBatch 是对多个point的抽象.这些point在由同一时刻,同一地点的传感器采集而得。
-数据成员主要描述了point的特性
+PointsBatch类是对多个点云point的抽象.这些point在由同一时刻,同一机器人坐标地点的传感器采集而得。
+数据成员主要描述了point的特性.
 
+1,time:point采集时间.
+2,origin:sensor的世界坐标
+3,frame_id:帧id
+4,trajectory_index:轨迹线id
+5,points:几何参数,vector<{x,y,z}>
+6,intensities:光强
+7,colors:point的rgb值
 */
 
 
@@ -73,7 +65,8 @@ struct PointsBatch {
   std::vector<Color> colors;
 };
 
-// Removes the indices in 'to_remove' from 'batch'. 按照to_temove中的索引,在batch中移除单个point
+// Removes the indices in 'to_remove' from 'batch'.
+// 按照to_temove中的索引,在batch中移除某些point.
 void RemovePoints(std::vector<int> to_remove, PointsBatch* batch);
 
 }  // namespace io

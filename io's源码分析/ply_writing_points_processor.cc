@@ -1,18 +1,3 @@
-/*
- * Copyright 2016 The Cartographer Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 #include "cartographer/io/ply_writing_points_processor.h"
 
@@ -30,6 +15,11 @@ namespace io {
 
 namespace {
 
+/*
+按照ply格式写入ply的head信息.此函数在最后写入.
+why?num_points_只有最后才知道.之前尚未统计完成.
+
+*/
 // Writes the PLY header claiming 'num_points' will follow it into
 // 'output_file'.
 void WriteBinaryPlyHeader(const bool has_color, const int64 num_points,
@@ -52,6 +42,9 @@ void WriteBinaryPlyHeader(const bool has_color, const int64 num_points,
   CHECK(file_writer->WriteHeader(out.data(), out.size()));
 }
 
+/*
+往file_writer写入某一point对应的{x,y,z}
+*/
 void WriteBinaryPlyPointCoordinate(const Eigen::Vector3f& point,
                                    FileWriter* const file_writer) {
   char buffer[12];
@@ -61,6 +54,9 @@ void WriteBinaryPlyPointCoordinate(const Eigen::Vector3f& point,
   CHECK(file_writer->Write(buffer, 12));
 }
 
+/*
+往file_writer写入rgb值
+*/
 void WriteBinaryPlyPointColor(const Color& color,
                               FileWriter* const file_writer) {
   CHECK(file_writer->Write(reinterpret_cast<const char*>(color.data()),
@@ -69,6 +65,9 @@ void WriteBinaryPlyPointColor(const Color& color,
 
 }  // namespace
 
+/*
+根据.lua文件的filename创建file_writer_factory
+*/
 std::unique_ptr<PlyWritingPointsProcessor>
 PlyWritingPointsProcessor::FromDictionary(
     FileWriterFactory file_writer_factory,
@@ -78,6 +77,9 @@ PlyWritingPointsProcessor::FromDictionary(
       file_writer_factory(dictionary->GetString("filename")), next);
 }
 
+/*
+构造函数,默认点云数是0,无rgb值
+*/
 PlyWritingPointsProcessor::PlyWritingPointsProcessor(
     std::unique_ptr<FileWriter> file_writer, PointsProcessor* const next)
     : next_(next),
@@ -85,6 +87,9 @@ PlyWritingPointsProcessor::PlyWritingPointsProcessor(
       has_colors_(false),
       file_(std::move(file_writer)) {}
 
+/*
+在最后阶段才写入head,但不是在文件最后写入head,而是out_.seekp(0); 偏移到0处
+*/
 PointsProcessor::FlushResult PlyWritingPointsProcessor::Flush() {
   WriteBinaryPlyHeader(has_colors_, num_points_, file_.get());
   CHECK(file_->Close()) << "Closing PLY file_writer failed.";
@@ -100,23 +105,28 @@ PointsProcessor::FlushResult PlyWritingPointsProcessor::Flush() {
   LOG(FATAL);
 }
 
+/*
+真正的写入点云PointsBatch,整个类的核心在这个函数.
+*/
 void PlyWritingPointsProcessor::Process(std::unique_ptr<PointsBatch> batch) {
-  if (batch->points.empty()) {
+  if (batch->points.empty()) { //点云为空,则不写入磁盘,直接进行下一Process环节.
     next_->Process(std::move(batch));
     return;
   }
 
-  if (num_points_ == 0) {
+  if (num_points_ == 0) {//点云num为0则写入rgb,和head
     has_colors_ = !batch->colors.empty();
     WriteBinaryPlyHeader(has_colors_, 0, file_.get());
+    //file_.get()获取指针指针对应的raw指针
   }
-  if (has_colors_) {
+  if (has_colors_) { //rgb的vector长度和point的vecor长度必须一致.
     CHECK_EQ(batch->points.size(), batch->colors.size())
         << "First PointsBatch had colors, but encountered one without. "
            "frame_id: "
         << batch->frame_id;
   }
 
+//函数核心,开始写入每一个point.
   for (size_t i = 0; i < batch->points.size(); ++i) {
     WriteBinaryPlyPointCoordinate(batch->points[i], file_.get());
     if (has_colors_) {
@@ -124,7 +134,7 @@ void PlyWritingPointsProcessor::Process(std::unique_ptr<PointsBatch> batch) {
     }
     ++num_points_;
   }
-  next_->Process(std::move(batch));
+  next_->Process(std::move(batch)); //继续流水线操作.
 }
 
 }  // namespace io

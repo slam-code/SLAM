@@ -1,18 +1,3 @@
-/*
- * Copyright 2016 The Cartographer Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 #ifndef CARTOGRAPHER_IO_POINTS_PROCESSOR_H_
 #define CARTOGRAPHER_IO_POINTS_PROCESSOR_H_
@@ -25,8 +10,10 @@ namespace cartographer {
 namespace io {
 
 /*
-PointsProcessor 虚基类,提供一种处理point的抽象接口,不可拷贝/赋值
-
+PointsProcessor 点云虚基类,提供一种批量处理points的抽象接口,不可拷贝/赋值
+2个抽象接口:
+1),Process()负责对PointsBatch进行处理
+2),Flush()刷新.
 
 
 */
@@ -40,13 +27,13 @@ class PointsProcessor {
   };
 
   PointsProcessor() {}
-  virtual ~PointsProcessor() {}
+  virtual ~PointsProcessor() {} //必须为虚函数,不然子类无法正确析构.
 
   PointsProcessor(const PointsProcessor&) = delete;
   PointsProcessor& operator=(const PointsProcessor&) = delete;
 
   // Receive a 'points_batch', process it and pass it on.
-  virtual void Process(std::unique_ptr<PointsBatch> points_batch) = 0;
+  virtual void Process(std::unique_ptr<PointsBatch> points_batch) = 0;//纯虚函数
 
   // Some implementations will perform expensive computations and others that do
   // multiple passes over the data might ask for restarting the stream.
