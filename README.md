@@ -12,9 +12,15 @@
 
         6)g2o
 
-        7)rpg_svo
+        7)rpg_svo/ SVO2.0
 
-        8)...
+        8)rgbdslam_v2
+
+        9)lsd_slam
+
+        10)g2o
+
+        11)...
 
 
 slam仓库不再更新关于cartographer的注释。cartographer的注释见：
