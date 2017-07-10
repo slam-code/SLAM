@@ -2,10 +2,13 @@
 # -----------
 # User Instructions
 #
-# Modify the previous code to adjust for a highly
-# confident last measurement. Do this by adding a
-# factor of 5 into your Omega and Xi matrices
-# as described in the video.
+# Write a function, doit, that takes as its input an
+# initial robot position, move1, and move2. This
+# function should compute the Omega and Xi matrices
+# discussed in lecture and should RETURN the mu vector
+# (which is the product of Omega.inverse() and Xi).
+#
+# Please enter your code at the bottom.
 
 
  
@@ -238,8 +241,6 @@ class matrix:
     # This code is based on http://adorio-research.org/wordpress/?p=4560
 
     def Cholesky(self, ztol= 1.0e-5):
-
-
         res = matrix()
         res.zero(self.dimx, self.dimx)
 
@@ -266,10 +267,6 @@ class matrix:
     # This code is based on http://adorio-research.org/wordpress/?p=4560
 
     def CholeskyInverse(self):
-    # Computes inverse of matrix given its Cholesky upper Triangular
-    # decomposition of matrix.
-        # This code is based on http://adorio-research.org/wordpress/?p=4560
-
         res = matrix()
         res.zero(self.dimx, self.dimx)
 
@@ -305,104 +302,65 @@ class matrix:
         return repr(self.value)
 
 
+
 # ######################################################################
 # ######################################################################
 # ######################################################################
 
 
 """
-For the following example, you would call doit(-3, 5, 3, 10, 5, 1):
+For the following example, you would call doit(-3, 5, 3):
 3 robot positions
-  initially: -3 (measure landmark to be 10 away)
-  moves by 5 (measure landmark to be 5 away)
-  moves by 3 (measure landmark to be 1 away)
+  initially: -3
+  moves by 5
+  moves by 3
 
   
 
 which should return a mu of:
 [[-3.0],
  [2.0],
- [5.0],
- [7.0]]
+ [5.0]]
 """
 
-# Including the 5 times multiplier, your returned mu should now be:
-#
-# [[-3.0],
-#  [2.179],
-#  [5.714],
-#  [6.821]]
 
+def doit(initial_pos, move1, move2):
+    #
+    #
+    # Add your code here.
+    #
+    #
+    Omega=matrix([[1,0,0],[0,0,0],[0,0,0]]) 
+    Xi=matrix([[initial_pos],[0],[0]])
 
-
-############## MODIFY CODE BELOW ##################
-#doit(-3, 5, 3, 10, 5, 1)
-def doit(initial_pos, move1, move2, Z0, Z1, Z2):
-    Omega = matrix([[1.0, 0.0, 0.0],
-                    [0.0, 0.0, 0.0],
-                    [0.0, 0.0, 0.0]])
-    Xi    = matrix([[initial_pos],
-                    [0.0],
-                    [0.0]])
-
-    Omega += matrix([[1.0, -1.0, 0.0],
-                     [-1.0, 1.0, 0.0],
-                     [0.0, 0.0, 0.0]])
-    Xi    += matrix([[-move1],
-                     [move1],
-                     [0.0]])
+    Omega+=matrix([[1,-1,0],[-1,1,0],[0,0,0]])
+    Xi+=matrix([[-move1],[move1],[0]])
     
-    Omega += matrix([[0.0, 0.0, 0.0],
-                     [0.0, 1.0, -1.0],
-                     [0.0, -1.0, 1.0]])
-    Xi    += matrix([[0.0],
-                     [-move2],
-                     [move2]])
-    
-    Omega = Omega.expand(4, 4, [0, 1, 2], [0, 1, 2])
-    Xi =    Xi.expand(4, 1, [0, 1, 2], [0])
+    Omega+=matrix([[0,0,0],[0,1,-1],[0,-1,1]])
+    Xi+=matrix([[0],[-move2],[move2]])
 
-    Omega += matrix([[1.0, 0.0, 0.0, -1.0],
-                     [0.0, 0.0, 0.0, 0.0],
-                     [0.0, 0.0, 0.0, 0.0],
-                     [-1.0, 0.0, 0.0, 1.0]])
-    Xi    += matrix([[-Z0],
-                     [0.0],
-                     [0.0],
-                     [Z0]])
+    Omega.show("Omega:  ")
 
-    Omega += matrix([[0.0, 0.0, 0.0, 0.0],
-                     [0.0, 1.0, 0.0, -1.0],
-                     [0.0, 0.0, 0.0, 0.0],
-                     [0.0, -1.0, 0.0, 1.0]])
-    Xi    += matrix([[0.0],
-                     [-Z1],
-                     [0.0],
-                     [Z1]])
+    Xi.show("Xi:  ")
 
-    # Omega += matrix([[0.0, 0.0, 0.0, 0.0],
-    #                  [0.0, 0.0, 0.0, 0.0],
-    #                  [0.0, 0.0, 1.0, -1.0],
-    #                  [0.0, 0.0, -1.0, 1.0]])
-    # Xi    += matrix([[0.0],
-    #                  [0.0],
-    #                  [-Z2],
-    #                  [Z2]])
-    Omega += matrix([[0.0, 0.0, 0.0, 0.0],
-                     [0.0, 0.0, 0.0, 0.0],
-                     [0.0, 0.0, 5.0, -5.0],
-                     [0.0, 0.0, -5.0, 5.0]])
-    Xi    += matrix([[0.0],
-                     [0.0],
-                     [-Z2*5],
-                     [Z2*5]])
-    Omega.show('Omega: ')
-    Xi.show('Xi:    ')
-    mu = Omega.inverse() * Xi
-    mu.show('Mu:    ')
-    
+    mu=Omega.inverse()*Xi
+
+
     return mu
 
-doit(-3, 5, 3, 10, 5, 1)
+print doit(-3, 5, 3)
 
 
+"""
+# -----------
+# User Instructions
+#
+# Write a function, doit, that takes as its input an
+# initial robot position, move1, and move2. This
+# function should compute the Omega and Xi matrices
+# discussed in lecture and should RETURN the mu vector
+# (which is the product of Omega.inverse() and Xi).
+#
+# Please enter your code at the bottom.
+
+"""
