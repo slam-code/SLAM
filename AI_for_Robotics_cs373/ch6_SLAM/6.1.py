@@ -491,24 +491,25 @@ def run(grid, goal, spath, params, printflag = False, speed = 0.1, timeout = 100
         estimate = filter.get_position()
 
         ### ENTER CODE HERE
-        #x=spath[index][0]
-        #y=spath[index][1]
 
-        x=myrobot.x
-        y=myrobot.y
+        x1=spath[index][0]
+        y1=spath[index][1]
 
-        x1=spath[index-1][0]
-        y1=spath[index-1][1]
-
-        x2=spath[index][0]
-        y2=spath[index][1]
+        x2=spath[index+1][0]
+        y2=spath[index+1][1]
 
         dx=x2-x1
         dy=y2-y1
 
-        Rx=x-x1
-        Ry=y-y1 
-        cte=(Rx*dx-Ry*dy)*1.0/(dx*dx+dy*dy)
+        drx=estimate[0]-x1
+        dry=estimate[1]-y1
+
+        u=(drx*dx+dry*dy)/(dx*dx+dy*dy)
+        
+        cte=(dry*dx-drx*dy)*1.0/(dx*dx+dy*dy)
+
+        if u>1.0:
+            index+=1
 
         # ----------------------------------------
 
