@@ -310,22 +310,6 @@ class matrix:
 # ######################################################################
 
 
-"""
-For the following example, you would call doit(-3, 5, 3, 10, 5, 1):
-3 robot positions
-  initially: -3 (measure landmark to be 10 away)
-  moves by 5 (measure landmark to be 5 away)
-  moves by 3 (measure landmark to be 1 away)
-
-  
-
-which should return a mu of:
-[[-3.0],
- [2.0],
- [5.0],
- [7.0]]
-"""
-
 # Including the 5 times multiplier, your returned mu should now be:
 #
 # [[-3.0],
@@ -336,7 +320,7 @@ which should return a mu of:
 
 
 ############## MODIFY CODE BELOW ##################
-#doit(-3, 5, 3, 10, 5, 1)
+
 def doit(initial_pos, move1, move2, Z0, Z1, Z2):
     Omega = matrix([[1.0, 0.0, 0.0],
                     [0.0, 0.0, 0.0],
@@ -379,15 +363,7 @@ def doit(initial_pos, move1, move2, Z0, Z1, Z2):
                      [-Z1],
                      [0.0],
                      [Z1]])
-
-    # Omega += matrix([[0.0, 0.0, 0.0, 0.0],
-    #                  [0.0, 0.0, 0.0, 0.0],
-    #                  [0.0, 0.0, 1.0, -1.0],
-    #                  [0.0, 0.0, -1.0, 1.0]])
-    # Xi    += matrix([[0.0],
-    #                  [0.0],
-    #                  [-Z2],
-    #                  [Z2]])
+ #引入噪声后的分布约束.方差sigma=5，方差越大，测量越不准。
     Omega += matrix([[0.0, 0.0, 0.0, 0.0],
                      [0.0, 0.0, 0.0, 0.0],
                      [0.0, 0.0, 5.0, -5.0],
@@ -396,6 +372,7 @@ def doit(initial_pos, move1, move2, Z0, Z1, Z2):
                      [0.0],
                      [-Z2*5],
                      [Z2*5]])
+
     Omega.show('Omega: ')
     Xi.show('Xi:    ')
     mu = Omega.inverse() * Xi
@@ -403,6 +380,6 @@ def doit(initial_pos, move1, move2, Z0, Z1, Z2):
     
     return mu
 
-doit(-3, 5, 3, 10, 5, 1)
+doit(-3, 5, 3, 10, 5, 1) #偏差为1.
 
 
