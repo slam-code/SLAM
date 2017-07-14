@@ -15,3 +15,5 @@ src
 .zip
 orig
 backup
+*.a
+*.out
