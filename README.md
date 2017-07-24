@@ -22,7 +22,7 @@
 
         11)...
 
-slam 源码分析公众号：![](slamcode.png)
+slam 源码分析公众号,slamcode：![](slamcode.jpg)
 
 
 slam仓库不再更新关于cartographer的注释。cartographer的注释见：
