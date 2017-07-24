@@ -23,6 +23,8 @@ int main()
 
     sout(a.angle()<<"=="<< M_PI/3);
 
+    sout(a.inverse().angle()<<"=="<<-M_PI/3);
+
     sout(a.Identity().toRotationMatrix());
 
 
