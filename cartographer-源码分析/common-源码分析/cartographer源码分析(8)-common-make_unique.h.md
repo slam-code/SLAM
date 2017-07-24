@@ -63,11 +63,12 @@ typename _Unique_if<T>::_Known_bound make_unique(Args&&...) = delete;//不能使
 完美的传递函数参数而不修改参数类型，左值依然是左值，右值依然是右值。
 */
 
+
 ```
 
 
 ```c++
-测试代码:
+测试代码:common/make_unique_test.cc
 
 
 #include <iostream>
@@ -123,3 +124,9 @@ TEST(MAKE_UNIQUE ,make_unique) {
 }
 
 ```
+
+
+本文发于：
+*  http://www.jianshu.com/u/9e38d2febec1 （推荐）
+*  https://zhuanlan.zhihu.com/learnmoreonce
+*  http://blog.csdn.net/learnmoreonce

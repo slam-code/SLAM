@@ -10,7 +10,9 @@ cartographer的注释版源码可在https://github.com/learnmoreonce/SLAM
 
 系列文章在以下网站更新，各网站阅读效果不同，但使用同一md文件。：
 
+
+本文发于：
+*  http://www.jianshu.com/u/9e38d2febec1 （推荐）
 *  https://zhuanlan.zhihu.com/learnmoreonce
 *  http://blog.csdn.net/learnmoreonce
-*  http://www.jianshu.com/u/9e38d2febec1 
 

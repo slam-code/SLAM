@@ -56,11 +56,10 @@ class FixedRatioSampler {
 #endif  // CARTOGRAPHER_COMMON_FIXED_RATIO_SAMPLER_H_
 
 
-
 ```
 
 ```c++
-代码fixed_ratio_sampler.cc:
+文件：fixed_ratio_sampler.cc:
 
 
 
@@ -98,7 +97,6 @@ string FixedRatioSampler::DebugString() {
 
 ```c++
 测试代码:
-
 
 
 #include "cartographer/common/fixed_ratio_sampler.h"

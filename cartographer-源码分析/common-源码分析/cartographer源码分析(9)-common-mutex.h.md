@@ -129,3 +129,9 @@ using MutexLocker = Mutex::Locker;
 
 
 ```
+
+
+本文发于：
+*  http://www.jianshu.com/u/9e38d2febec1 （推荐）
+*  https://zhuanlan.zhihu.com/learnmoreonce
+*  http://blog.csdn.net/learnmoreonce

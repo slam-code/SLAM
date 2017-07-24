@@ -5,6 +5,7 @@
  
  文件:common/rate_timer.h
 
+
 #ifndef CARTOGRAPHER_COMMON_RATE_TIMER_H_
 #define CARTOGRAPHER_COMMON_RATE_TIMER_H_
 
@@ -148,6 +149,7 @@ class RateTimer {
 
 文件:common/rate_timer_test.cc
 
+
 #include "cartographer/common/rate_timer.h"
 
 #include "gtest/gtest.h"
@@ -196,4 +198,11 @@ TEST(RateTimerTest, ComputeWallTimeRateRatio) {
 }  // namespace common
 }  // namespace cartographer
 
+
 ```
+
+
+本文发于：
+*  http://www.jianshu.com/u/9e38d2febec1 （推荐）
+*  https://zhuanlan.zhihu.com/learnmoreonce
+*  http://blog.csdn.net/learnmoreonce

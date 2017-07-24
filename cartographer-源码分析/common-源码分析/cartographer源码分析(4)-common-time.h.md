@@ -4,8 +4,6 @@
 ``` c++
  
 common/time.h
-
-
  /*
 预备知识:
 c++11 提供了语言级别的时间函数.包括duration和time_point
@@ -40,7 +38,9 @@ constexpr int64 kUtsEpochOffsetFromUnixEpochInSeconds =
 
 struct UniversalTimeScaleClock {
   using rep = int64;
-  using period = std::ratio<1, 10000000>; //百万分之一秒,微秒,us
+  using period = std::ratio<1, 10000000>; //百万分之一秒,1us 》错了，应该是0.1us.
+  //以下涉及到us的均应该纠正为0.1us
+  
   using duration = std::chrono::duration<rep, period>;
   using time_point = std::chrono::time_point<UniversalTimeScaleClock>;
   /*time_point的模板参数是UniversalTimeScaleClock,
@@ -54,6 +54,15 @@ struct UniversalTimeScaleClock {
 using Duration = UniversalTimeScaleClock::duration;//微秒,us
 using Time = UniversalTimeScaleClock::time_point;  //时间点
 
+/*Time::min()是chrono自带的函数。返回一个低于1970.01.01的数。
+
+编译运行cpp/cppstdlib_2nd/util/chrono1.cpp:
+epoch: Thu Jan  1 08:00:00 1970
+now:   Tue Jul  4 19:39:29 2017
+min:   Tue Sep 21 08:18:27 1677
+max:   Sat Apr 12 07:47:16 2262
+
+*/
 // Convenience functions to create common::Durations.
 //将秒数seconds转为c++的duration实例对象
 Duration FromSeconds(double seconds);              
@@ -81,13 +90,20 @@ std::ostream& operator<<(std::ostream& os, Time time);
 #endif  // CARTOGRAPHER_COMMON_TIME_H_
 
 
+
+/*
+linux下关于time转换：
+http://blog.chinaunix.net/uid-20532339-id-1931780.html
+https://stackoverflow.com/questions/2883576/how-do-you-convert-epoch-time-in-c/7844741#7844741
+https://www.epochconverter.com/batch*/
+
+
 ```
 
 
 ```c++
 common/time.cc
 
- 
 
 
 #include "cartographer/common/time.h"
@@ -133,4 +149,11 @@ common::Duration FromMilliseconds(const int64 milliseconds) {
 }  // namespace common
 }  // namespace cartographer
 
+
 ```
+
+
+本文发于：
+*  http://www.jianshu.com/u/9e38d2febec1 （推荐）
+*  https://zhuanlan.zhihu.com/learnmoreonce
+*  http://blog.csdn.net/learnmoreonce

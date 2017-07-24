@@ -84,3 +84,9 @@ cartographer_paper_deutsches_museum.bag 470.5M
 Cartographer 现已经支持 Toyota HSR、TurtleBots、PR2、Revo LDS 这几个机器人平台。
 
 ```
+
+
+本文发于：
+*  http://www.jianshu.com/u/9e38d2febec1 （推荐）
+*  https://zhuanlan.zhihu.com/learnmoreonce
+*  http://blog.csdn.net/learnmoreonce

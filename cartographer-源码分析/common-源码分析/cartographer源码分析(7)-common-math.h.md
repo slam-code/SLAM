@@ -89,7 +89,8 @@ T atan2(const Eigen::Matrix<T, 2, 1>& vector) {  //范围是[-pi,pi]
 
 
 ```c++
-测试代码:
+
+测试代码:common/math_test.cc
 
 #include "cartographer/common/math.h"
 
@@ -138,3 +139,9 @@ TEST(MathTest, testNormalizeAngleDifference) {
 }  // namespace cartographer
 
 ```
+
+
+本文发于：
+*  http://www.jianshu.com/u/9e38d2febec1 （推荐）
+*  https://zhuanlan.zhihu.com/learnmoreonce
+*  http://blog.csdn.net/learnmoreonce
