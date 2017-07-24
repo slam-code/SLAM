@@ -66,6 +66,9 @@ typename _Unique_if<T>::_Known_bound make_unique(Args&&...) = delete;//不能使
 
 ```
 
+.
+
+
 
 ```c++
 测试代码:common/make_unique_test.cc
@@ -127,6 +130,7 @@ TEST(MAKE_UNIQUE ,make_unique) {
 
 
 本文发于：
-*  http://www.jianshu.com/u/9e38d2febec1 （推荐）
+*  http://www.jianshu.com/u/9e38d2febec1 
 *  https://zhuanlan.zhihu.com/learnmoreonce
 *  http://blog.csdn.net/learnmoreonce
+*  slam源码分析微信公众号:slamcode

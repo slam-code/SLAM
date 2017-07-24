@@ -143,6 +143,8 @@ class RateTimer {
 ```
 
 
+.
+
 
 
 ```c++
@@ -203,6 +205,7 @@ TEST(RateTimerTest, ComputeWallTimeRateRatio) {
 
 
 本文发于：
-*  http://www.jianshu.com/u/9e38d2febec1 （推荐）
+*  http://www.jianshu.com/u/9e38d2febec1 
 *  https://zhuanlan.zhihu.com/learnmoreonce
 *  http://blog.csdn.net/learnmoreonce
+*  slam源码分析微信公众号:slamcode
