@@ -22,7 +22,7 @@
 
         11)...
 
-slam源码分析公众号：slamcode：
+slam源码分析公众号:slamcode
 <div  align="center">    
  <img src="https://raw.githubusercontent.com/learnmoreonce/SLAM/master/slamcode.jpg" width = "200" height = "200" alt="slamcode" align=center />
 </div>
@@ -31,6 +31,4 @@ slam源码分析公众号：slamcode：
 
 
 
-
-slam仓库不再更新关于cartographer的注释。cartographer的注释见：
-https://github.com/learnmoreonce/cartographer
+cartographer注释版源码：https://github.com/learnmoreonce/cartographer
