@@ -23,15 +23,13 @@
         11)...
 
 slam源码分析公众号：slamcode：
-
- <img src="https://raw.githubusercontent.com/learnmoreonce/SLAM/master/slamcode.jpg" width = "100" height = "100" alt="slamcode" align=center />
-
-
-
+<div  align="center">    
+ <img src="https://raw.githubusercontent.com/learnmoreonce/SLAM/master/slamcode.jpg" width = "200" height = "200" alt="slamcode" align=center />
+</div>
 
 
 
-![](https://raw.githubusercontent.com/learnmoreonce/SLAM/master/slamcode.jpg)
+
 
 
 slam仓库不再更新关于cartographer的注释。cartographer的注释见：
