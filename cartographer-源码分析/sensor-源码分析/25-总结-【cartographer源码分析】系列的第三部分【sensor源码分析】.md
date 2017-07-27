@@ -1,8 +1,9 @@
 
 
  
-###【cartographer源码分析】系列的第三部分【sensor源码分析】。
+### 【cartographer源码分析】系列的第三部分【sensor源码分析】。
 现总结sensor文件夹涉及到的主要功能：
+
 ---
 ## 【1】sensor/point_cloud.h：
 
@@ -16,7 +17,7 @@
  * PointCloud ToPointCloud(const proto::PointCloud& proto);反序列化
  
 ---
-##【2】sensor/compressed_point_cloud.h
+## 【2】sensor/compressed_point_cloud.h
 - CompressedPointCloud点云压缩类,压缩ponits以减少存储空间，压缩后有精度损失。方法：按照block分组。提供5个函数：
  * CompressedPointCloud(const PointCloud& point_cloud) 使用点云数据初始化，并将点云压缩到  std::vector<int32> point_data_中，num_points_为点云数量
  * PointCloud Decompress() const;返回解压缩的点云
