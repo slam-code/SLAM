@@ -17,7 +17,9 @@
  * PointCloud ToPointCloud(const proto::PointCloud& proto);反序列化
  
 ---
+
 ## 【2】sensor/compressed_point_cloud.h
+
 - CompressedPointCloud点云压缩类,压缩ponits以减少存储空间，压缩后有精度损失。方法：按照block分组。提供5个函数：
  * CompressedPointCloud(const PointCloud& point_cloud) 使用点云数据初始化，并将点云压缩到  std::vector<int32> point_data_中，num_points_为点云数量
  * PointCloud Decompress() const;返回解压缩的点云
@@ -25,6 +27,8 @@
  * size_t size() const;  点云数量
  * ConstIterator begin() const;访问点云block的迭代器
  * ConstIterator end() const;点云block的尾后迭代器
+
+---
 
 ##【3】sensor/range_data.h
 
@@ -47,9 +51,11 @@
  * CompressedRangeData Compress(const RangeData& range_data);压缩,有精度丢失。
  * RangeData Decompress(const CompressedRangeData& compressed_range_Data);解压缩,有精度丢失。
 .
+
 ---
 
 ##【4】sensor/Data.h
+
 Data是针对某一类的传感器的数据的封装。
 
 - 类内数据结构：
@@ -79,6 +85,7 @@ Data是针对某一类的传感器的数据的封装。
 ---
 
 ##【5】sensor/ordered_multi_queue.h
+
 ordered_multi_queue.h定义了一系列处理多个传感器的数据的类，用于接收/标识来自传感器的数据。
 
 定义了一个QueueKey用于标识传感器数据，并将其作为OrderedMultiQueue的关键字key。
@@ -127,6 +134,7 @@ key3：Queue
 ----
 
 ## 【6】 sensor/collator.h
+
 Collator,采集者，抽象了设备采集器。将多传感器采集的数据归并到轨迹上。只有一个默认构造函数，有2个数据成员
 
 - Collator
@@ -182,6 +190,7 @@ voxel_filter.h定义了与3维网格grid体素的滤波相关的数据结构和�
   *   PointCloud Filter(const PointCloud& point_cloud) const;对点云进行体素滤波,返回过滤后的点云
 
 ---
+
 ## 【8】sensor/configuration.h 
 
 configuration.h 主要配置了和传感器设备相关的参数。
