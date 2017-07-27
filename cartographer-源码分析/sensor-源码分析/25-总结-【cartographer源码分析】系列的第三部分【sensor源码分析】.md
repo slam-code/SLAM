@@ -77,6 +77,7 @@ Data是针对某一类的传感器的数据的封装。
 
 
 ---
+
 ##【5】sensor/ordered_multi_queue.h
 ordered_multi_queue.h定义了一系列处理多个传感器的数据的类，用于接收/标识来自传感器的数据。
 
@@ -147,9 +148,8 @@ Collator,采集者，抽象了设备采集器。将多传感器采集的数据�
 ---
 
 ##【7】 sensor/voxel_filter.h
-voxel_filter.h定义了与3维网格grid体素的滤波相关的数据结构和相关函数。作用：将点云转换为稀疏体素grid表达。以节省空间
 
----
+voxel_filter.h定义了与3维网格grid体素的滤波相关的数据结构和相关函数。作用：将点云转换为稀疏体素grid表达。以节省空间
 
 体素滤波器,对每一个体素voxel,采用第一个point代替该体素内的所有points
 
