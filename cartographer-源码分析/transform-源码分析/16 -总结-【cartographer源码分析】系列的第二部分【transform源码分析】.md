@@ -1,8 +1,9 @@
 
 
  
-###【cartographer源码分析】系列的第二部分【transform源码分析】 
+### 【cartographer源码分析】系列的第二部分【transform源码分析】 
 现总结transform文件夹涉及到的主要功能：
+
 ## 【1】transform/rigid_transform.h：
 rigid_transform.h主要定义了Rigid2 和Rigid3，并封装了2D变换和3D变换的相关函数。
 
@@ -111,8 +112,6 @@ TransformInterpolationBuffer类定义了离散时间段内的transform变换信�
  *  common::Time latest_time() const; 最晚时间，也就是队尾元素
  *  bool empty() const; 队列是否为空
  
-.
-
 .
   ---
 
