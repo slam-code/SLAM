@@ -17,3 +17,7 @@ orig
 backup
 *.a
 *.out
+
+*note
+note
+note/
