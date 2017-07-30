@@ -20,7 +20,7 @@ namespace io {
 /*
 OutlierRemovingPointsProcessor是PointsProcessor的第八个子类(8).
 OutlierRemovingPointsProcessor：
-作用：体素过滤器,Remove有移动痕迹的体素。只保留没有移动的体素
+作用：; 异常体素过滤器,Remove有移动痕迹的体素。只保留没有移动的体素
 
 数据成员：
 

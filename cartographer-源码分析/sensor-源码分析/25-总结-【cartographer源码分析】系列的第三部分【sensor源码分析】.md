@@ -205,7 +205,7 @@ configuration.h 主要配置了和传感器设备相关的参数。
 ---
 
 关于sensor文件夹的源码分析已经完毕，更详细细节可https://github.com/learnmoreonce/cartographer 查看注释版源码。
-
+markdown文件可在https://github.com/learnmoreonce/SLAM 下载
 
 
 

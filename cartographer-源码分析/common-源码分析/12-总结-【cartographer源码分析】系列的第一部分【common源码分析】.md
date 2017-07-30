@@ -96,8 +96,8 @@ BlockingQueue类是线程安全的阻塞队列,(生产者消费者模式)
  * PopWithTimeout(),删除元素，若超时则返回false
  .
 
-关于common文件的源码分析已经完毕，更详细细节可https://github.com/learnmoreonce/cartographer 查看注释版源码。
-
+关于common文件夹的源码分析已经完毕，更详细细节可https://github.com/learnmoreonce/cartographer 查看注释版源码。
+markdown文件可在https://github.com/learnmoreonce/SLAM 下载
 
 
 
