@@ -8,7 +8,7 @@
 rigid_transform.h主要定义了Rigid2 和Rigid3，并封装了2D变换和3D变换的相关函数。
 
 ---
- Rigid2 封装了2D平面网格的旋转和平移操作，方便使用2D变换。
+ Rigid2 封装了2D的旋转和平移操作，方便使用2D变换。
  
 - 含有2个数据成员
   * translation_代表平移向量[dx,dy]
@@ -40,7 +40,7 @@ rigid_transform.h主要定义了Rigid2 和Rigid3，并封装了2D变换和3D变�
     *  Rigid2<FloatType>::Vector operator*(const Rigid2<FloatType>& rigid,const typename Rigid2<FloatType>::Vector& point);//公式1的实现。
 
 ---
-Rigid3是三维网格变换。使用Eigen的四元数对网格进行3D变换
+Rigid3是三维变换。使用Eigen的四元数进行3D变换
 
 -  含有2个数据成员
     * Vector translation_;//x,y,z方向上的平移向量[dx,dy,dz]
@@ -77,7 +77,7 @@ Rigid3是三维网格变换。使用Eigen的四元数对网格进行3D变换
 transform.h封装了多个关于3D变换的函数，包括
 
 - 获取旋转角度值
-     * FloatType GetAngle(const Rigid3<FloatType>& transform)；返回3维网格变换的四元数的角度θ，四元数q=[cos(θ/2),sin(θ/2)x,sin(θ/2)y,sin(θ/2)z]
+     * FloatType GetAngle(const Rigid3<FloatType>& transform)；返回3维变换的四元数的角度θ，四元数q=[cos(θ/2),sin(θ/2)x,sin(θ/2)y,sin(θ/2)z]
     * T GetYaw(const Eigen::Quaternion<T>& rotation) ；返四元数yaw方向的弧度值,也就是z轴方向的弧度。
      * T GetYaw(const Rigid3<T>& transform) ；返回3D变换yaw方向(z轴)的弧度值
  . 
@@ -116,13 +116,13 @@ TransformInterpolationBuffer类定义了离散时间段内的transform变换信�
   ---
 
 
-关于transform文件夹的源码分析已经完毕，更详细细节可https://github.com/learnmoreonce/cartographer 查看注释版源码。
-markdown文件可在https://github.com/learnmoreonce/SLAM 下载
+关于transform文件夹的源码分析已经完毕，更详细细节可https://github.com/slam4code/cartographer 查看注释版源码。
+markdown文件可在https://github.com/slam4code/SLAM 下载
 
 
 
-本文发于：
-*  http://www.jianshu.com/u/9e38d2febec1
-*  https://zhuanlan.zhihu.com/learnmoreonce
-*  http://blog.csdn.net/learnmoreonce
+本文发于：  
+
 *  slam源码分析微信公众号:slamcode
+
+*  http://blog.csdn.net/learnmoreonce
