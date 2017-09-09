@@ -126,3 +126,10 @@ markdown文件可在https://github.com/slam4code/SLAM 下载
 *  slam源码分析微信公众号:slamcode
 
 *  http://blog.csdn.net/learnmoreonce
+
+
+<div  align="center">    
+ <img src="https://raw.githubusercontent.com/slam4code/SLAM/master/slamcode.jpg" width = "200" height = "200" alt="slamcode" align=center />
+</div>
+
+
