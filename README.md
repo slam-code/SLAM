@@ -1,4 +1,4 @@
-## slam 源码注释/分析包括:  
+## 我的slam 源码注释/分析:  
 
         1)cartographer  
 
@@ -22,7 +22,7 @@
 
         11)...
 
-slam源码分析公众号:slamcode
+slam源码分析公众号:
  
 
 <div  align="center">    
@@ -33,5 +33,4 @@ slam源码分析公众号:slamcode
 
 
 
-cartographer注释版源码：https://github.com/slam4code/cartographer
 

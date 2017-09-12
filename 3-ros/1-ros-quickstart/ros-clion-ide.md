@@ -12,7 +12,7 @@ my执行:
 vim ~/.local/share/applications/jetbrains-clion.desktop
 by modifying the line containing Exec= to
 
-shen执行:Exec=bash -i -c "/INSTALL_LOCATION/clion-2016.3.2/bin/clion.sh" %f
+执行:Exec=bash -i -c "/INSTALL_LOCATION/clion-2016.3.2/bin/clion.sh" %f
 
 
 配置ROS+Clion
