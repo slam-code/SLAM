@@ -41,7 +41,7 @@ $ sudo apt-get install ros-<distro>-ros-tutorials
                 Services: 
                  * /rosout/set_logger_level
                  * /rosout/get_loggers
-                contacting node http://shen-yang:36009/ ...
+                contacting node http://yang:36009/ ...
                 Pid: 13726
 
 #5,使用 rosrun
