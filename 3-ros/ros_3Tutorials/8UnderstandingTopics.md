@@ -1,6 +1,7 @@
 ##理解ROS话题:
         本教程介绍ROS话题（topics）以及如何使用rostopic 和 rxplot 命令行工具。
 
+
 #1,运行example:
         roscore
         rosrun turtlesim turtlesim_node
@@ -11,6 +12,7 @@
         urtlesim_node节点和turtle_teleop_key节点之间是通过一个ROS话题来互相通信的。
         turtle_teleop_key在一个话题上发布按键输入消息，而turtlesim则订阅该话题以接收该消息。
         下面让我们使用rqt_graph来显示当前运行的节点和话题。
+
 
 
 #3,rqt_graph
