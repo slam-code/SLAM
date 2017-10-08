@@ -1,15 +1,15 @@
-非模板版本可读性较好。
-建议阅读顺序：
+```c
+非模板版本可读性较好。  
 
-2D 旋转
+建议阅读顺序：  
+
+2D 旋转  
 so2.h  
-so2.cpp
-test_so2.cpp  
-
-.
-
-2D 旋转+平移
-se2.h  
+so2.cpp  
+test_so2.cpp    
+  
+2D 旋转+平移  
+se2.h   
 se2.cpp
 test_se2.cpp
 
@@ -32,3 +32,5 @@ test_scso3.cpp
 sim3.h
 sim3.cpp
 test_sim3.cpp
+
+```
